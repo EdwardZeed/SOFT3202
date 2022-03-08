@@ -88,7 +88,6 @@ public class ShoppingBasketTest {
         basket.addItem("apple", 1);
         assertThrows(IllegalArgumentException.class, () -> basket.removeItem(null, 1));
 
-        assertThrows(IllegalArgumentException.class, () -> basket.removeItem("apple", "1.0"));
 
     }
 
