@@ -21,7 +21,7 @@ public class ShoppingBasketTest {
         basket.addItem("pear", 1);
         assertEquals(3, basket.getItems().size());
         assertEquals("pear", basket.getItems().get(2).getKey());
-        assertEquals(1.0, basket.getItems().get(2).getValue());
+        assertEquals(1, basket.getItems().get(2).getValue());
 
         basket.addItem("banana", 1);
         assertEquals(4, basket.getItems().size());
@@ -120,8 +120,8 @@ public class ShoppingBasketTest {
     @Test
     public void testClear(){
         ShoppingBasket basket = new ShoppingBasket();
-        basket.addItem("apple", 1.0);
-        basket.addItem("orange", 1.0);
+        basket.addItem("apple", 1);
+        basket.addItem("orange", 1);
         assertEquals(2, basket.getItems().size());
         
         basket.clear();
