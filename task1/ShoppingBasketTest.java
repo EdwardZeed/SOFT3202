@@ -3,6 +3,8 @@ package au.edu.sydney.soft3202.task1;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import javafx.util.Pair;
+
 public class ShoppingBasketTest {
 
     @Test
@@ -27,6 +29,11 @@ public class ShoppingBasketTest {
         assertEquals(4, basket.getItems().size());
         assertEquals("banana", basket.getItems().get(3).getKey());
         assertEquals(1, basket.getItems().get(3).getValue());
+
+        basket.addItem("Apple", 3);
+        assertEquals(4, basket.getItems().size());
+        assertEquals("apple", basket.getItems().get(0).getKey());
+        assertEquals(4, basket.getItems().get(0).getValue());
     }
 
     @Test
