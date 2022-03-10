@@ -30,12 +30,15 @@ public class ShoppingBasketTest {
         assertEquals("banana", basket.getItems().get(3).getKey());
         assertEquals(1, basket.getItems().get(3).getValue());
 
-        basket.addItem("Apple", 3);
-        assertEquals(4, basket.getItems().size());
-        assertEquals("apple", basket.getItems().get(0).getKey());
-        assertEquals(4, basket.getItems().get(0).getValue());
     }
-
+    @Test
+    public void testAddItemCaseSensitive(){
+        ShoppingBasket basket = new ShoppingBasket();
+        basket.addItem("APPLE", 1);
+        assertEquals(1, basket.getItems().size());
+        assertEquals("apple", basket.getItems().get(0).getKey());
+        assertEquals(1, basket.getItems().get(0).getValue());
+    }
     @Test
     public void testAddItemFail(){
         ShoppingBasket basket = new ShoppingBasket();
@@ -93,7 +96,8 @@ public class ShoppingBasketTest {
     public void testRemoveItemFail(){
         ShoppingBasket basket = new ShoppingBasket();
         basket.addItem("apple", 1);
-        assertThrows(IllegalArgumentException.class, () -> basket.removeItem(null, 1));
+//        assertThrows(IllegalArgumentException.class, () -> basket.removeItem(null, 1));
+        assertThrows(IllegalArgumentException.class, () -> basket.removeItem("apple", 0));
 
 
     }
@@ -101,7 +105,7 @@ public class ShoppingBasketTest {
     @Test
     public void testGetItems() {
         ShoppingBasket basket = new ShoppingBasket();
-        assertNull(basket.getItems());
+        assertEquals(0, basket.getItems().size());
 
         basket.addItem("apple", 1);
         assertEquals(1, basket.getItems().size());
