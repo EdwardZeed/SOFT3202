@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import javafx.util.Pair;
 
+import java.util.List;
+
 public class ShoppingBasketTest {
 
     @Test
@@ -29,6 +31,14 @@ public class ShoppingBasketTest {
         assertEquals(4, basket.getItems().size());
         assertEquals("banana", basket.getItems().get(3).getKey());
         assertEquals(1, basket.getItems().get(3).getValue());
+
+        basket.addItem("apple", 3);
+        assertEquals(4, basket.getItems().size());
+        for(Pair<String, Integer> item : basket.getItems()) {
+            if (item.getKey().equals("apple")) {
+                assertEquals(4, item.getValue());
+            }
+        }
 
     }
     @Test
@@ -98,6 +108,8 @@ public class ShoppingBasketTest {
         basket.addItem("apple", 1);
 //        assertThrows(IllegalArgumentException.class, () -> basket.removeItem(null, 1));
         assertThrows(IllegalArgumentException.class, () -> basket.removeItem("apple", 0));
+
+        assertThrows(IllegalArgumentException.class, () -> basket.removeItem(null, 0));
 
 
     }
