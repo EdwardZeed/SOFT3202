@@ -170,6 +170,8 @@ public class ShoppingBasketTest {
 
         assertThrows(IllegalArgumentException.class, () -> basket.removeItem(null, 0));
 
+        assertThrows(IllegalArgumentException.class, () -> basket.removeItem("does not exist", -1));
+
     }
 
     @Test
