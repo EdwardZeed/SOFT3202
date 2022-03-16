@@ -192,8 +192,69 @@ public class BSFacadeImplTest {
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.searchProjects(null));
     }
 
-//    @Test
-//    public void testAudit() {
-//
-//    }
+    @Test
+    public void testAudit() {
+        ComplianceReporting complianceReporting = mock(ComplianceReporting.class);
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.injectCompliance(complianceReporting);
+
+        bsFacadeImpl.login("secure", "secure");
+        Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50, 55);
+        bsFacadeImpl.audit();
+
+    }
+
+    @Test
+    public void testAuditFailed(){
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.audit());
+
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.login("basic", "basic");
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.audit());
+
+    }
+
+    @Test
+    public void testFinaliseProjectFailed(){
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(1));
+
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.login("basic", "basic");
+        Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50, 55);
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()) );
+
+        bsFacadeImpl.login("secure", "secure");
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()) );
+
+        ClientReporting clientReporting = mock(ClientReporting.class);
+        bsFacadeImpl.injectClient(clientReporting);
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()+1) );
+
+
+    }
+
+    @Test
+    public void testInjectAuthFailed(){
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.injectAuth(null, authorisationModule));
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.injectAuth(authenticationModule, null));
+
+    }
+
+    @Test
+    public void testLoginFailed(){
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.login("secure", "secure"));
+
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.login(null, "secure"));
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.login("secure", null));
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.login(null, null));
+    }
+
+    @Test
+    public void testLogoutFailed(){
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.logout());
+
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.logout());
+    }
 }
