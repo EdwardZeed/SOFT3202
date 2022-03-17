@@ -60,7 +60,7 @@ public class BSFacadeImplTest {
 
         Project result = mock(Project.class);
         try(MockedStatic<Project> mockedProject = mockStatic(Project.class)){
-            mockedProject.when(Project.makeProject(project.getId(), "testingAssignment", 50.0, 55.0)).thenReturn(result);
+            mockedProject.when(Project.makeProject(project.getId(), "testingAssignment", 50.0, 5.0)).thenReturn(result);
             assertThat(project, equalTo(result));
         }
     }
@@ -182,8 +182,8 @@ public class BSFacadeImplTest {
         Project result1 = mock(Project.class);
         Project result2 = mock(Project.class);
         try(MockedStatic<Project> mockedProject = mockStatic(Project.class)){
-            mockedProject.when(() -> Project.makeProject(project1.getId(), "testingAssignment1", 50.0, 55.0)).thenReturn(result1);
-            mockedProject.when(() -> Project.makeProject(project2.getId(), "testingAssignment2", 60.0, 66.0)).thenReturn(result2);
+            mockedProject.when(() -> Project.makeProject(project1.getId(), "testingAssignment1", 50.0, 5.0)).thenReturn(result1);
+            mockedProject.when(() -> Project.makeProject(project2.getId(), "testingAssignment2", 60.0, 6.0)).thenReturn(result2);
 
             assertThat(result1, equals(projects.get(0)));
             assertThat(result2, equals(projects.get(1)));
@@ -240,6 +240,20 @@ public class BSFacadeImplTest {
     public void testInjectAuthFailed(){
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.injectAuth(null, authorisationModule));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.injectAuth(authenticationModule, null));
+
+    }
+
+    @Test
+    public void testLogin(){
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        boolean login1 = bsFacadeImpl.login("Basic", "basic");
+        assertFalse(login1);
+
+        boolean login2 = bsFacadeImpl.login("basic", "secure");
+        assertFalse(login2);
+
+        boolean login3 = bsFacadeImpl.login("basic", "basic");
+        assertTrue(login3);
 
     }
 
