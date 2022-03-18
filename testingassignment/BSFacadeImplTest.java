@@ -123,14 +123,14 @@ public class BSFacadeImplTest {
         assertTrue(result3);
     }
 
-//    @Test
-//    public void testSetProjectCeiling(){
-//        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
-//        bsFacadeImpl.login("basic", "basic");
-//        Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50, 55);
-//        bsFacadeImpl.setProjectCeiling(project.getId(), 150);
-//
-//    }
+   @Test
+   public void testSetProjectCeiling(){
+       bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+       bsFacadeImpl.login("basic", "basic");
+       Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50, 55);
+       bsFacadeImpl.setProjectCeiling(project.getId(), 150);
+
+   }
 
     @Test
     public void testSetProjectCeilingFailed(){
