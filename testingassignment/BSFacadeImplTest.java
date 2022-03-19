@@ -96,8 +96,9 @@ public class BSFacadeImplTest {
     @Test
     public void testRemoveProject() {
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
-        bsFacadeImpl.login("secure", "secure");
+        bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        bsFacadeImpl.login("secure", "secure");
         bsFacadeImpl.removeProject(project.getId());
         assertEquals(0, bsFacadeImpl.getAllProjects().size());
     }
