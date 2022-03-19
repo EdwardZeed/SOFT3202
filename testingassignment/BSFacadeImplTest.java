@@ -49,7 +49,7 @@ public class BSFacadeImplTest {
         when(authorisationModule.authorise(both, true)).thenReturn(true);
         when(authorisationModule.authorise(both, false)).thenReturn(true);
 
-        when(authenticationModule.authenticate(secre)).thenReturn(true);
+        when(authenticationModule.authenticate(secure)).thenReturn(true);
         when(authenticationModule.authenticate(basic)).thenReturn(true);
         when(authenticationModule.authenticate(both)).thenReturn(true);
 
