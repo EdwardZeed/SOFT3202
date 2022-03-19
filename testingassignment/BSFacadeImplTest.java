@@ -125,11 +125,11 @@ public class BSFacadeImplTest {
         boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 10, false);
         assertTrue(result1);
 
-        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task2", 101, false);
+        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task2", 99, false);
         assertFalse(result2);
 
         bsFacadeImpl.login("secure", "secure");
-        boolean result3 = bsFacadeImpl.addTask(project.getId(), "task3", 101, true);
+        boolean result3 = bsFacadeImpl.addTask(project.getId(), "task3", 99, true);
         assertTrue(result3);
     }
 
@@ -140,14 +140,14 @@ public class BSFacadeImplTest {
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
         bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
-        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project.getId(), "task1", 101, true));
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project.getId(), "task1", 10, true));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), null, 10, false));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), "", 10, false));
 
         bsFacadeImpl.login("secure", "secure");
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project.getId(), "task1", 10, false));
-        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), null, 10, false));
-        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), "", 10, false));
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), null, 10, true));
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), "", 10, true));
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project.getId()+1, "task1", 10, true));
     }
 
@@ -247,10 +247,11 @@ public class BSFacadeImplTest {
 
         bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        bsFacadeImpl.addTask(project.getId(), "task1", 60, false);
         bsFacadeImpl.login("secure", "secure");
-        bsFacadeImpl.addTask(project.getId(), "task1", 101, true);
+        bsFacadeImpl.addTask(project.getId(), "task2", 60, true);
         bsFacadeImpl.audit();
-        verify(complianceReporting).sendReport("testingAssignment", 1, secure);
+        verify(complianceReporting).sendReport("testingAssignment", 20, secure);
 
     }
 
