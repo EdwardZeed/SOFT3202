@@ -60,7 +60,7 @@ public class BSFacadeImplTest {
 
         Project result = mock(Project.class);
         try(MockedStatic<Project> mockedProject = mockStatic(Project.class)){
-            mockedProject.when(Project.makeProject(project.getId(), "testingAssignment", 50.0, 5.0)).thenReturn(result);
+            mockedProject.when(() -> Project.makeProject(project.getId(), "testingAssignment", 50.0, 5.0)).thenReturn(result);
             assertThat(project, equalTo(result));
         }
     }
@@ -185,8 +185,8 @@ public class BSFacadeImplTest {
             mockedProject.when(() -> Project.makeProject(project1.getId(), "testingAssignment1", 50.0, 5.0)).thenReturn(result1);
             mockedProject.when(() -> Project.makeProject(project2.getId(), "testingAssignment2", 60.0, 6.0)).thenReturn(result2);
 
-            assertThat(result1, equals(projects.get(0)));
-            assertThat(result2, equals(projects.get(1)));
+            assertThat(result1, equalTo(projects.get(0)));
+            assertThat(result2, equalTo(projects.get(1)));
         }
     }
 
