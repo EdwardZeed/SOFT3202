@@ -111,9 +111,9 @@ public class BSFacadeImplTest {
         bsFacadeImpl.login("basic", "basic");
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.removeProject(1));
 
-        bsFacadeImpl.logout();
-        bsFacadeImpl.login("secure", "secure");
+//        bsFacadeImpl.logout();
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        bsFacadeImpl.login("secure", "secure");
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.removeProject(project.getId()+1));
     }
 
