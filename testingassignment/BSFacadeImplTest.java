@@ -157,7 +157,9 @@ public class BSFacadeImplTest {
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
         bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        bsFacadeImpl.login("secure", "secure");
         bsFacadeImpl.setProjectCeiling(project.getId(), 150);
+        bsFacadeImpl.login("basic", "basic");
         boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
         assertFalse(result1);
         boolean result2 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
