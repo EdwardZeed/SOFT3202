@@ -271,6 +271,7 @@ public class BSFacadeImplTest {
         ClientReporting clientReporting = mock(ClientReporting.class);
 
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.injectClient(clientReporting);
         bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
         bsFacadeImpl.login("both", "both");
