@@ -225,7 +225,7 @@ public class BSFacadeImplTest {
             mock.when(() -> Project.makeProject(anyInt(), anyString(), anyDouble(), anyDouble()))
                     .thenReturn(result1);
             mock.when(() -> Project.makeProject(anyInt(), anyString(), anyDouble(), anyDouble()))
-                    .thenReturn(result1);
+                    .thenReturn(result2);
 
 //            assertThat(result1, equalTo(projects.get(0)));
 //            assertThat(result2, equalTo(projects.get(1)));
