@@ -60,7 +60,7 @@ public class BSFacadeImplTest {
     public void testAddProject() {
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
         bsFacadeImpl.login("basic", "basic");
-        Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+//        Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
 //        assertEquals(1, bsFacadeImpl.getAllProjects().size());
 //        assertEquals(project, bsFacadeImpl.getAllProjects().get(0));
 
@@ -70,7 +70,7 @@ public class BSFacadeImplTest {
             mockedProject.when(() -> Project.makeProject(anyInt(), anyString(), anyDouble(), anyDouble()))
                     .thenReturn(result);
 
-//            Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+            Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
             assertThat(project, equalTo(result));
         }
     }
@@ -211,11 +211,11 @@ public class BSFacadeImplTest {
     public void testSearchProjects(){
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
         bsFacadeImpl.login("basic", "basic");
-        Project project1 = bsFacadeImpl.addProject("testingAssignment1", "client1", 50.0, 60.0);
-        Project project2 = bsFacadeImpl.addProject("testingAssignment2", "client1", 60.0, 70.0);
-
-        List<Project> projects = bsFacadeImpl.searchProjects("client1");
-        assertEquals(2, projects.size());
+//        Project project1 = bsFacadeImpl.addProject("testingAssignment1", "client1", 50.0, 60.0);
+//        Project project2 = bsFacadeImpl.addProject("testingAssignment2", "client1", 60.0, 70.0);
+//
+//        List<Project> projects = bsFacadeImpl.searchProjects("client1");
+//        assertEquals(2, projects.size());
 
         Project result1 = mock(Project.class);
         Project result2 = mock(Project.class);
@@ -230,11 +230,11 @@ public class BSFacadeImplTest {
 //            assertThat(result1, equalTo(projects.get(0)));
 //            assertThat(result2, equalTo(projects.get(1)));
 
-//            Project project1 = bsFacadeImpl.addProject("testingAssignment1", "client1", 50.0, 60.0);
-//            Project project2 = bsFacadeImpl.addProject("testingAssignment2", "client1", 60.0, 70.0);
-//
-//            List<Project> projects = bsFacadeImpl.searchProjects("client1");
-//            assertEquals(2, projects.size());
+            Project project1 = bsFacadeImpl.addProject("testingAssignment1", "client1", 50.0, 60.0);
+            Project project2 = bsFacadeImpl.addProject("testingAssignment2", "client1", 60.0, 70.0);
+
+            List<Project> projects = bsFacadeImpl.searchProjects("client1");
+            assertEquals(2, projects.size());
 
             for (Project project : projects) {
                 if(project.getName() == "testingAssignment1"){
