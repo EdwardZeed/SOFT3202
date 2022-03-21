@@ -86,8 +86,10 @@ public class BSFacadeImplTest {
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addProject("testingAssignment", "", 50.0, 60.0));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addProject("testingAssignment", null, 50.0, 60.0));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addProject("testingAssignment", "client1", 101.0, 60.0));
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addProject("testingAssignment", "client1", -1.0, 101.0));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 10.0));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 101.0));
+        assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, -1.0));
 
         bsFacadeImpl.logout();
         bsFacadeImpl.login("secure", "secure");
@@ -99,9 +101,12 @@ public class BSFacadeImplTest {
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
         bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        assertEquals(1, bsFacadeImpl.getAllProjects().size());
+        assertEquals(1, bsFacadeImpl.searchProjects("client1").size());
         bsFacadeImpl.login("secure", "secure");
         bsFacadeImpl.removeProject(project.getId());
         assertEquals(0, bsFacadeImpl.getAllProjects().size());
+        assertEquals(0, bsFacadeImpl.searchProjects("client1").size());
     }
 
     @Test
@@ -145,6 +150,7 @@ public class BSFacadeImplTest {
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project.getId(), "task1", 10, true));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), null, 10, false));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.addTask(project.getId(), "", 10, false));
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project.getId()+1, "task1", 10, false));
 
         bsFacadeImpl.login("secure", "secure");
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project.getId(), "task1", 10, false));
@@ -158,19 +164,17 @@ public class BSFacadeImplTest {
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
         bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
-        bsFacadeImpl.login("secure", "secure");
-        bsFacadeImpl.setProjectCeiling(project.getId(), 150);
-        bsFacadeImpl.login("basic", "basic");
-//        boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
-//        assertFalse(result1);
-//        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
-//        assertTrue(result2);
         boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 99, false);
         assertTrue(result1);
         boolean result2 = bsFacadeImpl.addTask(project.getId(), "task2", 40, false);
-        assertTrue(result2);
-        boolean result3 = bsFacadeImpl.addTask(project.getId(), "task3", 99, false);
-        assertFalse(result3);
+        assertFalse(result2);
+        bsFacadeImpl.login("secure", "secure");
+        bsFacadeImpl.setProjectCeiling(project.getId(), 150);
+        bsFacadeImpl.login("basic", "basic");
+        boolean result3 = bsFacadeImpl.addTask(project.getId(), "task3", 40, false);
+        assertTrue(result3);
+        boolean result4 = bsFacadeImpl.addTask(project.getId(), "task4", 99, false);
+        assertFalse(result4);
 
 
     }
@@ -263,6 +267,15 @@ public class BSFacadeImplTest {
     }
 
     @Test
+    public void testGetAllProjects(){
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.login("basic", "basic");
+        Project project1 = bsFacadeImpl.addProject("testingAssignment1", "client1", 50.0, 60.0);
+        Project project2 = bsFacadeImpl.addProject("testingAssignment2", "client1", 60.0, 70.0);
+        assertEquals(2, bsFacadeImpl.getAllProjects().size());
+    }
+
+    @Test
     public void testAudit() {
         ComplianceReporting complianceReporting = mock(ComplianceReporting.class);
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
@@ -283,6 +296,11 @@ public class BSFacadeImplTest {
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.audit());
 
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.login("secure", "secure");
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.audit());
+
+        ComplianceReporting complianceReporting = mock(ComplianceReporting.class);
+        bsFacadeImpl.injectCompliance(complianceReporting);
         bsFacadeImpl.login("basic", "basic");
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.audit());
 
@@ -301,6 +319,7 @@ public class BSFacadeImplTest {
         verify(clientReporting).sendReport(eq("client1"), anyString(), eq(both));
 
     }
+
     @Test
     public void testFinaliseProjectFailed(){
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(1));
@@ -308,14 +327,14 @@ public class BSFacadeImplTest {
         bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
         bsFacadeImpl.login("basic", "basic");
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
-        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()) );
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()));
 
         bsFacadeImpl.login("secure", "secure");
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()) );
 
         ClientReporting clientReporting = mock(ClientReporting.class);
         bsFacadeImpl.injectClient(clientReporting);
-        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()+1) );
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()) );
 
         bsFacadeImpl.login("basic", "basic");
         assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project.getId()) );
@@ -330,7 +349,48 @@ public class BSFacadeImplTest {
     public void testInjectAuthFailed(){
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.injectAuth(null, authorisationModule));
         assertThrows(IllegalArgumentException.class, () -> bsFacadeImpl.injectAuth(authenticationModule, null));
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.login("basic", "basic");
+        Project project1 = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        bsFacadeImpl.injectAuth(null, null);
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.addTask(project1.getId(), "task1", 60, false));
 
+    }
+
+    @Test
+    public void testInjectClient(){
+        ClientReporting clientReporting = mock(ClientReporting.class);
+
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.injectClient(clientReporting);
+        bsFacadeImpl.login("basic", "basic");
+        Project project1 = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        Project project2 = bsFacadeImpl.addProject("testingAssignment", "client2", 50.0, 60.0);
+        bsFacadeImpl.login("both", "both");
+        bsFacadeImpl.finaliseProject(project1.getId());
+        verify(clientReporting).sendReport(eq("client1"), anyString(), eq(both));
+
+        bsFacadeImpl.injectClient(null);
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.finaliseProject(project2.getId()) );
+
+    }
+
+    @Test
+    public void testInjectCompliance(){
+        ComplianceReporting complianceReporting = mock(ComplianceReporting.class);
+        bsFacadeImpl.injectAuth(authenticationModule, authorisationModule);
+        bsFacadeImpl.injectCompliance(complianceReporting);
+
+        bsFacadeImpl.login("basic", "basic");
+        Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
+        bsFacadeImpl.addTask(project.getId(), "task1", 60, false);
+        bsFacadeImpl.login("secure", "secure");
+        bsFacadeImpl.addTask(project.getId(), "task2", 60, true);
+        bsFacadeImpl.audit();
+        verify(complianceReporting).sendReport("testingAssignment", 20, secure);
+
+        bsFacadeImpl.injectCompliance(null);
+        assertThrows(IllegalStateException.class, () -> bsFacadeImpl.audit());
     }
 
     @Test
