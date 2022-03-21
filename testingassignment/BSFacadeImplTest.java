@@ -167,8 +167,10 @@ public class BSFacadeImplTest {
 //        assertTrue(result2);
         boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 99, false);
         assertTrue(result1);
-        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task2", 99, false);
+        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task2", 40, false);
         assertTrue(result2);
+        boolean result3 = bsFacadeImpl.addTask(project.getId(), "task3", 99, false);
+        assertFalse(result3);
 
 
     }
