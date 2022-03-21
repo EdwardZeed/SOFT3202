@@ -161,10 +161,15 @@ public class BSFacadeImplTest {
         bsFacadeImpl.login("secure", "secure");
         bsFacadeImpl.setProjectCeiling(project.getId(), 150);
         bsFacadeImpl.login("basic", "basic");
-        boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
-        assertFalse(result1);
-        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
+//        boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
+//        assertFalse(result1);
+//        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task1", 101, false);
+//        assertTrue(result2);
+        boolean result1 = bsFacadeImpl.addTask(project.getId(), "task1", 99, false);
+        assertTrue(result1);
+        boolean result2 = bsFacadeImpl.addTask(project.getId(), "task2", 99, false);
         assertTrue(result2);
+
 
     }
 
@@ -291,7 +296,7 @@ public class BSFacadeImplTest {
         Project project = bsFacadeImpl.addProject("testingAssignment", "client1", 50.0, 60.0);
         bsFacadeImpl.login("both", "both");
         bsFacadeImpl.finaliseProject(project.getId());
-        verify(clientReporting).sendReport("client1", "", both);
+        verify(clientReporting).sendReport(eq("client1"), anyString(), eq(both));
 
     }
     @Test
