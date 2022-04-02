@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="595.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.InfoPageController">
+   <children>
+      <Label fx:id="welcomeLbl" alignment="CENTER" layoutX="-1.0" layoutY="47.0" prefHeight="35.0" prefWidth="600.0" text="welcome">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Text fx:id="creditsText" layoutX="84.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="299.21630859375">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Text fx:id="joinDateText" layoutX="84.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="467.21630859375">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Text fx:id="shipCountText" layoutX="84.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="311.21630859375">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Text fx:id="structureCountText" layoutX="84.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="292.21630859375">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Text fx:id="usernameText" layoutX="84.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="292.21630859375">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Button fx:id="seeLoansBtn" layoutX="65.0" layoutY="314.0" mnemonicParsing="false" onAction="#showLoans" prefHeight="44.0" prefWidth="80.0" text="see loans" />
+      <Button fx:id="obtainBtn" layoutX="212.0" layoutY="314.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="80.0" text="obtain loan" />
+      <Text fx:id="InfoPageMsg" layoutX="50.0" layoutY="575.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="527.0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Text>
+      <Button layoutX="357.0" layoutY="314.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="144.0" text="see available ships" />
+      <Button layoutX="357.0" layoutY="393.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="144.0" text="purchase a ship" />
+      <Button layoutX="212.0" layoutY="393.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="101.0" text="purchase good" />
+      <Button layoutX="65.0" layoutY="393.0" mnemonicParsing="false" onAction="#showMyShips" prefHeight="44.0" prefWidth="101.0" text="show my ships" />
+      <Button layoutX="65.0" layoutY="456.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="115.0" text="view marketplace" />
+      <Button layoutX="212.0" layoutY="456.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="138.0" text="view neaarby location" />
+      <Button layoutX="357.0" layoutY="456.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="144.0" text="start a flight plan" />
+      <Button layoutX="65.0" layoutY="509.0" mnemonicParsing="false" onAction="#showFlightPlans" prefHeight="44.0" prefWidth="144.0" text="view my flight plan" />
+      <Button layoutX="254.0" layoutY="509.0" mnemonicParsing="false" onAction="#goSearchPage1" prefHeight="44.0" prefWidth="101.0" text="sell goods" />
+   </children>
+</AnchorPane>

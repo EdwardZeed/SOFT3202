@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="642.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SearchPageController">
+   <children>
+      <Button layoutX="263.0" layoutY="71.0" mnemonicParsing="false" onAction="#searchLoan" text="search loans" />
+      <TextField fx:id="SearchLoan" layoutX="116.0" layoutY="33.0" prefHeight="26.0" prefWidth="354.0" promptText="input what type of loan you want to take off here" />
+      <TextField fx:id="SearchShips" layoutX="21.0" layoutY="127.0" prefHeight="26.0" prefWidth="354.0" promptText="input ship type here" />
+      <Button layoutX="408.0" layoutY="127.0" mnemonicParsing="false" onAction="#searchShip" text="search available ships" />
+      <Button layoutX="408.0" layoutY="210.0" mnemonicParsing="false" onAction="#purchaseShip" text="purchase ship" />
+      <TextField fx:id="LocationTextField" layoutX="21.0" layoutY="195.0" prefHeight="26.0" prefWidth="354.0" promptText="input location here" />
+      <TextField fx:id="ClassTextField" layoutX="21.0" layoutY="236.0" prefHeight="26.0" prefWidth="354.0" promptText="input class here" />
+      <TextField fx:id="ShipIdTextField" layoutX="21.0" layoutY="292.0" prefHeight="26.0" prefWidth="354.0" promptText="ship ID" />
+      <TextField fx:id="GoodTextField" layoutX="21.0" layoutY="337.0" prefHeight="26.0" prefWidth="354.0" promptText="good" />
+      <TextField fx:id="QuantityTextField" layoutX="21.0" layoutY="376.0" prefHeight="26.0" prefWidth="354.0" promptText="quantity" />
+      <Button layoutX="420.0" layoutY="305.0" mnemonicParsing="false" onAction="#purchaseGood" text="buy goods" />
+      <Button layoutX="504.0" layoutY="33.0" mnemonicParsing="false" onAction="#goBackToInfoPage" text="previous page" />
+      <Button layoutX="420.0" layoutY="441.0" mnemonicParsing="false" onAction="#viewMarketplace" text="view marketplace" />
+      <TextField fx:id="MarketplaceLocationTextField" layoutX="21.0" layoutY="441.0" prefHeight="26.0" prefWidth="363.0" promptText="input location here" />
+      <Separator layoutY="103.0" prefHeight="11.0" prefWidth="600.0" />
+      <Separator layoutX="6.0" layoutY="169.0" prefHeight="11.0" prefWidth="600.0" />
+      <Separator layoutY="274.0" prefHeight="11.0" prefWidth="600.0" />
+      <Separator layoutY="415.0" prefHeight="11.0" prefWidth="600.0" />
+      <Separator layoutX="6.0" layoutY="476.0" prefHeight="11.0" prefWidth="600.0" />
+      <TextField fx:id="LocationTypeTextField" layoutX="21.0" layoutY="496.0" prefHeight="26.0" prefWidth="363.0" promptText="input location type here" />
+      <Button layoutX="421.0" layoutY="496.0" mnemonicParsing="false" onAction="#showNearbyLocation" prefHeight="26.0" prefWidth="136.0" text="view nearby location" />
+      <Separator layoutX="5.0" layoutY="528.0" prefHeight="11.0" prefWidth="600.0" />
+      <TextField fx:id="shipId2TextField" layoutX="21.0" layoutY="539.0" prefHeight="26.0" prefWidth="363.0" promptText="input ship id here" />
+      <TextField fx:id="destinationTextField" layoutX="21.0" layoutY="575.0" prefHeight="26.0" prefWidth="363.0" promptText="input destination here" />
+      <Button layoutX="428.0" layoutY="563.0" mnemonicParsing="false" onAction="#startJourney" prefHeight="26.0" prefWidth="112.0" text="start a journey" />
+      <Button layoutX="420.0" layoutY="351.0" mnemonicParsing="false" onAction="#sellGoods" prefHeight="26.0" prefWidth="75.0" text="sell goods" />
+      <Text fx:id="errMessage" layoutX="64.0" layoutY="633.0" strokeType="OUTSIDE" strokeWidth="0.0" text="error message" wrappingWidth="471.21630859375" />
+      <Separator layoutY="607.0" prefHeight="11.0" prefWidth="600.0" />
+   </children>
+</AnchorPane>

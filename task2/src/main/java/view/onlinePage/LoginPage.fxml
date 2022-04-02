@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="463.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WindowController">
+   <children>
+      <Label fx:id="tokenLabel" layoutX="164.0" layoutY="118.0" prefHeight="31.0" prefWidth="75.0" text="token">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
+      <TextField fx:id="tokenField" layoutX="280.0" layoutY="121.0" />
+      <Button fx:id="loginButton" layoutX="300.0" layoutY="194.0" mnemonicParsing="false" onAction="#goToInfoPage" prefHeight="48.0" prefWidth="90.0" text="login">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
+      <Text fx:id="LoginErrText" layoutX="155.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.21630859375">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <Label alignment="CENTER" layoutX="164.0" layoutY="265.0" prefHeight="48.0" prefWidth="290.0" text="do not have an account yet? sign up here" />
+      <Separator layoutX="2.0" layoutY="262.0" prefHeight="0.0" prefWidth="600.0" />
+      <TextField fx:id="UsernameTextField" layoutX="164.0" layoutY="316.0" prefHeight="26.0" prefWidth="309.0" promptText="type your username here" />
+      <Button layoutX="265.0" layoutY="354.0" mnemonicParsing="false" onAction="#SignUp" text="sign up" />
+   </children>
+</AnchorPane>
