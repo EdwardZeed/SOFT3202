@@ -63,10 +63,16 @@ public class InfoPageController {
                 controller.purchaseFuel();
             }
             else if (event.getSource() == btn10) {
-                controller.purchaseGoods();
+                controller.getButton().setOnAction(e -> {
+                    controller.purchaseGoods();
+                        });
+
             }
             else if (event.getSource() == btn11) {
-                controller.createFlightPlan();
+                controller.getButton().setOnAction(e -> {
+                            controller.createFlightPlan();
+                        });
+
             }
             else if (event.getSource() == btn12) {
                 controller.viewCurrentFlightPlan();
