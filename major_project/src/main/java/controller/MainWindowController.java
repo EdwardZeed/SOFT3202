@@ -11,7 +11,7 @@ import model.Pastebin;
 import model.online.CurrencyScoopAPI;
 import model.online.PastebinAPI;
 import model.offline.CurrencyScoopOffline;
-import model.offline.PastbinOffline;
+import model.offline.PastebinOffline;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -39,17 +39,23 @@ public class MainWindowController {
         this.pastebin = pastebin;
     }
 
-    public void setOffline(){
+    public void setCurrencyOffline(){
         CurrencyScoopOffline offline = new CurrencyScoopOffline();
-        PastbinOffline pastbinOffline = new PastbinOffline();
         setApi(offline);
-        setPastebin(pastbinOffline);
     }
 
-    public void setOnline(){
-        CurrencyScoopAPI api = new CurrencyScoopAPI();
+    public void setCurrencyOnline(){
+        CurrencyScoopAPI online = new CurrencyScoopAPI();
+        setApi(online);
+    }
+
+    public void setPastebinOffline(){
+        PastebinOffline offline = new PastebinOffline();
+        setPastebin(offline);
+    }
+
+    public void setPastebinOnline(){
         PastebinAPI pastebin = new PastebinAPI();
-        setApi(api);
         setPastebin(pastebin);
     }
 
