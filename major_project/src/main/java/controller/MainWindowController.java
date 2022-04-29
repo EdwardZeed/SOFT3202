@@ -4,16 +4,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.CurrencyScoop;
 import model.Pastebin;
-import model.online.CurrencyScoopAPI;
-import model.online.PastebinAPI;
-import model.offline.CurrencyScoopOffline;
-import model.offline.PastebinOffline;
+import model.CurrencyScoopAPI;
+import model.PastebinAPI;
 
+
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
@@ -31,32 +34,10 @@ public class MainWindowController {
     private CurrencyScoop api;
     private Pastebin pastebin;
 
-    public void setApi(CurrencyScoop api) {
-        this.api = api;
-    }
 
-    public void setPastebin(Pastebin pastebin) {
-        this.pastebin = pastebin;
-    }
-
-    public void setCurrencyOffline(){
-        CurrencyScoopOffline offline = new CurrencyScoopOffline();
-        setApi(offline);
-    }
-
-    public void setCurrencyOnline(){
-        CurrencyScoopAPI online = new CurrencyScoopAPI();
-        setApi(online);
-    }
-
-    public void setPastebinOffline(){
-        PastebinOffline offline = new PastebinOffline();
-        setPastebin(offline);
-    }
-
-    public void setPastebinOnline(){
-        PastebinAPI pastebin = new PastebinAPI();
-        setPastebin(pastebin);
+    public void setStatus(boolean currencyOnline, boolean pastebinOnline) {
+        api = new CurrencyScoopAPI(currencyOnline);
+        pastebin = new PastebinAPI(pastebinOnline);
     }
 
     public void AddCurrency(){
@@ -119,9 +100,16 @@ public class MainWindowController {
     }
 
     public void handleConvert() throws IOException, URISyntaxException, InterruptedException {
-        String fromCurrency = from.getSelectionModel().getSelectedItem().toString();
-        String toCurrency = to.getSelectionModel().getSelectedItem().toString();
-        double amount = Double.parseDouble(this.amount.getText());
+        String fromCurrency = null;
+        String toCurrency = null;
+        double amount = 0;
+        try {
+            fromCurrency = from.getSelectionModel().getSelectedItem().toString();
+            toCurrency = to.getSelectionModel().getSelectedItem().toString();
+            amount = Double.parseDouble(this.amount.getText());
+        }catch (Exception e){
+            Alert noInput = new Alert(Alert.AlertType.ERROR);
+        }
 
         double result = api.convert(fromCurrency, toCurrency, amount);
         double rate = api.getRate(fromCurrency, toCurrency);
@@ -144,8 +132,23 @@ public class MainWindowController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Result");
         alert.setHeaderText("Result");
-        alert.setContentText("Result: " + result + "\n" + "Rate: " + rate);
+        alert.setContentText("Result: " + result + "\n" + "Rate: " + rate + "\n" + "output: " + toOutput +
+                "\n" + "click show detail to browse the output website");
+
+//        make the output link clickable
+        Hyperlink link = new Hyperlink(toOutput);
+        link.setOnAction(event -> {
+            try {
+                Desktop.getDesktop().browse(new URI(toOutput));
+            }
+            catch (Exception e){
+                System.out.println(e);
+            }
+        });
+
+        alert.getDialogPane().setExpandableContent(link);
         alert.showAndWait();
+
 
     }
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ModelOnlineTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2022-04-29T10:06:59" hostname="Edwards-MacBook-Pro.local" time="0.48">
+  <properties/>
+  <testcase name="testPastebinOnline()" classname="ModelOnlineTest" time="0.421"/>
+  <testcase name="testConvertOnline()" classname="ModelOnlineTest" time="0.03"/>
+  <testcase name="testRateOffline()" classname="ModelOnlineTest" time="0.014"/>
+  <testcase name="testConvertOffline()" classname="ModelOnlineTest" time="0.002"/>
+  <testcase name="testPastebinOffline()" classname="ModelOnlineTest" time="0.009"/>
+  <testcase name="testRateOnline()" classname="ModelOnlineTest" time="0.002"/>
+  <system-out><![CDATA[{"EUR":1}
+{"EUR":0.9463667}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

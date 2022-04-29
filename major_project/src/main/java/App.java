@@ -15,18 +15,23 @@ public class App extends Application {
         Scene scene = new Scene(loader.load());
         MainWindowController controller = loader.getController();
 
-        if (state1.equals("offline")) {
-            controller.setCurrencyOffline();
+        boolean currencyStatus = true;
+        boolean pastebinStatus = true;
+        if (state1.equals("online")) {
+            currencyStatus = true;
         }
-        if (state2.equals("offline")) {
-            controller.setPastebinOffline();
+        else if (state1.equals("offline")) {
+            currencyStatus = false;
         }
-        if(state1.equals("online") ) {
-            controller.setCurrencyOnline();
+
+        if (state2.equals("online")) {
+            pastebinStatus = true;
         }
-        if(state2.equals("online")) {
-            controller.setPastebinOnline();
+        else if (state2.equals("offline")) {
+            pastebinStatus = false;
         }
+        controller.setStatus(currencyStatus, pastebinStatus);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

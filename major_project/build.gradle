@@ -41,3 +41,10 @@ sourceSets {
     }
 }
 
+test {
+
+    testLogging {
+        outputs.upToDateWhen {false}
+        showStandardStreams = true
+    }
+}
