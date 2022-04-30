@@ -103,52 +103,59 @@ public class MainWindowController {
         String fromCurrency = null;
         String toCurrency = null;
         double amount = 0;
+
+        boolean isValid = false;
         try {
             fromCurrency = from.getSelectionModel().getSelectedItem().toString();
             toCurrency = to.getSelectionModel().getSelectedItem().toString();
             amount = Double.parseDouble(this.amount.getText());
+            isValid = true;
         }catch (Exception e){
-            Alert noInput = new Alert(Alert.AlertType.ERROR);
+            Alert invalid = new Alert(Alert.AlertType.ERROR);
+            invalid.setTitle("Invalid Input");
+            invalid.setHeaderText("Invalid Input");
+            invalid.setContentText("Please enter a valid input");
+            invalid.showAndWait();
         }
+        if (isValid) {
+            double result = api.convert(fromCurrency, toCurrency, amount);
+            double rate = api.getRate(fromCurrency, toCurrency);
 
-        double result = api.convert(fromCurrency, toCurrency, amount);
-        double rate = api.getRate(fromCurrency, toCurrency);
+    //        get the country name from the currency code
+            String fromCountry = "";
+            String toCountry = "";
+            for (String key : countries.keySet()) {
+                if (countries.get(key).equals(fromCurrency)) {
+                    fromCountry = key;
+                }
+                if (countries.get(key).equals(toCurrency)) {
+                    toCountry = key;
+                }
+            }
+            String output = "from:" + fromCountry + "\nto:" + toCountry + "\nrate:" + rate + "\nstarting value:" + amount +"\nfinishing value:" + result;
+            String toOutput = pastebin.createPastin(output);
+            System.out.println(toOutput);
 
-//        get the country name from the currency code
-        String fromCountry = "";
-        String toCountry = "";
-        for (String key : countries.keySet()) {
-            if (countries.get(key).equals(fromCurrency)) {
-                fromCountry = key;
-            }
-            if (countries.get(key).equals(toCurrency)) {
-                toCountry = key;
-            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Result");
+            alert.setHeaderText("Result");
+            alert.setContentText("Result: " + result + "\n" + "Rate: " + rate + "\n" + "output: " + toOutput +
+                    "\n" + "click show detail to browse the output website");
+
+    //        make the output link clickable
+            Hyperlink link = new Hyperlink(toOutput);
+            link.setOnAction(event -> {
+                try {
+                    Desktop.getDesktop().browse(new URI(toOutput));
+                }
+                catch (Exception e){
+                    System.out.println(e);
+                }
+            });
+
+            alert.getDialogPane().setExpandableContent(link);
+            alert.showAndWait();
         }
-        String output = "from:" + fromCountry + "\nto:" + toCountry + "\nrate:" + rate + "\nstarting value:" + amount +"\nfinishing value:" + result;
-        String toOutput = pastebin.createPastin(output);
-        System.out.println(toOutput);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Result");
-        alert.setHeaderText("Result");
-        alert.setContentText("Result: " + result + "\n" + "Rate: " + rate + "\n" + "output: " + toOutput +
-                "\n" + "click show detail to browse the output website");
-
-//        make the output link clickable
-        Hyperlink link = new Hyperlink(toOutput);
-        link.setOnAction(event -> {
-            try {
-                Desktop.getDesktop().browse(new URI(toOutput));
-            }
-            catch (Exception e){
-                System.out.println(e);
-            }
-        });
-
-        alert.getDialogPane().setExpandableContent(link);
-        alert.showAndWait();
-
 
     }
 
