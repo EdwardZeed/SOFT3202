@@ -55,6 +55,7 @@ public class MainWindowController {
         stage.setScene(scene);
         stage.show();
 
+//        the following code is modified from https://blog.birost.com/a?ID=00550-7ba27155-686d-4aef-8504-3e5a73dc6ad5
         StageManagement.stages.put("MapWindow", stage);
         StageManagement.controllers.put("MainWindow", this);
 
