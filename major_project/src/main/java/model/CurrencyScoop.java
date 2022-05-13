@@ -1,8 +1,9 @@
 package model;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 public interface CurrencyScoop {
-    double convert(String from, String to, double amount);
-    double getRate(String from, String to) throws URISyntaxException;
+    Convert convert(String from, String to, double amount) throws URISyntaxException, IOException, InterruptedException;
+    Rate getRate(String from, String to) throws URISyntaxException, IOException, InterruptedException;
 }

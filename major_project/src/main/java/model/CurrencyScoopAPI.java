@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import model.CurrencyScoop;
 import model.request.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 
 
@@ -18,29 +20,23 @@ public class CurrencyScoopAPI implements CurrencyScoop {
 
     }
 
-    public double convert(String from, String to, double amount)  {
+    public Convert convert(String from, String to, double amount) throws URISyntaxException, IOException, InterruptedException {
 
-        HttpResponse<String> response = currencyReq.getConvertResponse(from, to, amount);
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
-        double value = jsonObject.getAsJsonObject("response").get("value").getAsDouble();
-        return value;
+        return currencyReq.getConvert(from, to, amount);
     }
 
 
 
-    public double getRate(String from, String to)  {
+    public Rate getRate(String from, String to) throws URISyntaxException, IOException, InterruptedException {
 
-        HttpResponse<String> response = currencyReq.getRateResponse(from, to);
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
-        double rate = jsonObject.getAsJsonObject("response").getAsJsonObject("rates").get(to).getAsDouble();
-        System.out.println(jsonObject.getAsJsonObject("response").getAsJsonObject("rates"));
-        return rate;
+
+        return currencyReq.getRate(from, to);
 
     }
 
     public void setRequest(CurrencyRequest currencyReq) {
         this.currencyReq = currencyReq;
     }
+
+
 }

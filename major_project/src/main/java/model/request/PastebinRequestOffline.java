@@ -1,5 +1,7 @@
 package model.request;
 
+import model.PastebinResult;
+
 import javax.net.ssl.SSLSession;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,7 +12,7 @@ import java.util.Optional;
 
 public class PastebinRequestOffline implements PastebinRequest {
     @Override
-    public HttpResponse<String> getPastebinResponse(String text) {
+    public PastebinResult getPastebinResponse(String text) {
         HttpResponse<String> response = new HttpResponse<>() {
 
             @Override
@@ -53,6 +55,6 @@ public class PastebinRequestOffline implements PastebinRequest {
                 return null;
             }
         };
-        return response;
+        return new PastebinResult(response.body());
     }
 }

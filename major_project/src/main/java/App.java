@@ -1,5 +1,5 @@
 import controller.MainWindowController;
-import controller.StageManagement;
+import view.MainWIndowView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
         Scene scene = new Scene(loader.load());
-        MainWindowController controller = loader.getController();
+        MainWIndowView view = loader.getController();
 
         boolean currencyStatus = true;
         boolean pastebinStatus = true;
@@ -30,7 +30,7 @@ public class App extends Application {
         else if (state2.equals("offline")) {
             pastebinStatus = false;
         }
-        controller.setStatus(currencyStatus, pastebinStatus);
+        view.setStatus(currencyStatus, pastebinStatus);
 
         primaryStage.setScene(scene);
         primaryStage.show();

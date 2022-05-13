@@ -17,9 +17,9 @@ public class PastebinAPI implements Pastebin {
     }
 
 
-    public String createPastin(String text)  {
-        HttpResponse<String> response = request.getPastebinResponse(text);
-        return response.body();
+    public PastebinResult createPastin(String text)  {
+        PastebinResult result = request.getPastebinResponse(text);
+        return result;
 
     }
 
