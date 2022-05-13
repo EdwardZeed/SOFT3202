@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ModelOnlineTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-05-12T16:17:05" hostname="Edwards-MacBook-Pro.local" time="8.097">
+<testsuite name="ModelOnlineTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-05-13T06:51:22" hostname="Edwards-MacBook-Pro.local" time="7.985">
   <properties/>
-  <testcase name="testPastebinOnline()" classname="ModelOnlineTest" time="0.417"/>
-  <testcase name="testConvertOnlineInvalid()" classname="ModelOnlineTest" time="4.188"/>
-  <testcase name="testConvertOnline()" classname="ModelOnlineTest" time="0.028"/>
-  <testcase name="testRateOffline()" classname="ModelOnlineTest" time="0.018"/>
+  <testcase name="testPastebinOnline()" classname="ModelOnlineTest" time="0.489"/>
+  <testcase name="testConvertOnlineInvalid()" classname="ModelOnlineTest" time="3.589"/>
+  <testcase name="testConvertOnline()" classname="ModelOnlineTest" time="0.029"/>
+  <testcase name="testRateOffline()" classname="ModelOnlineTest" time="0.016"/>
   <testcase name="testConvertOffline()" classname="ModelOnlineTest" time="0.001"/>
-  <testcase name="testPastebinOffline()" classname="ModelOnlineTest" time="0.013"/>
+  <testcase name="testPastebinOffline()" classname="ModelOnlineTest" time="0.011"/>
   <testcase name="testRateOnline()" classname="ModelOnlineTest" time="0.001"/>
-  <testcase name="testGetRateInvalid()" classname="ModelOnlineTest" time="3.429"/>
+  <testcase name="testGetRateInvalid()" classname="ModelOnlineTest" time="3.844"/>
   <system-out><![CDATA[0.0
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>

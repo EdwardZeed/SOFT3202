@@ -79,4 +79,16 @@ public class MainWindowController {
 //        this.countries.put(countryName, currencyCode);
     }
 
+    public void clear() {
+        this.countries.clear();
+        this.mainWindowView.updateListView(this.countries);
+    }
+
+    public void remove(String currencyCode) {
+        for (String key : countries.keySet()) {
+            if (countries.get(key).equals(currencyCode)) {
+                countries.remove(key);
+            }
+        }
+    }
 }

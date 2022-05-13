@@ -84,6 +84,7 @@ public class MainWIndowView {
         listView.getItems().clear();
         from.getItems().clear();
         to.getItems().clear();
+        this.mainWindowController.clear();
     }
 
     public void handleRemove(){
@@ -92,6 +93,7 @@ public class MainWIndowView {
         listView.getItems().remove(selected);
         from.getItems().remove(currencyCode);
         to.getItems().remove(currencyCode);
+        this.mainWindowController.remove(currencyCode);
     }
 
 
