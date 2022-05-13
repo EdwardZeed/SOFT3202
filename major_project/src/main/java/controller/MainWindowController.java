@@ -88,6 +88,7 @@ public class MainWindowController {
         for (String key : countries.keySet()) {
             if (countries.get(key).equals(currencyCode)) {
                 countries.remove(key);
+                this.mainWindowView.updateListView(this.countries);
             }
         }
     }
