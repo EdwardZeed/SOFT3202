@@ -3,6 +3,7 @@ package view;
 import controller.MainWindowController;
 import controller.StageManagement;
 import javafx.fxml.FXML;
+import javafx.stage.Stage;
 import org.controlsfx.control.WorldMapView;
 
 import java.io.IOException;
@@ -20,21 +21,25 @@ public class MapView {
     }
 
     private void showCurrencyInListView() throws IOException {
-        System.out.println(map.getSelectedCountries());
-        System.out.println(Currency.getInstance(new Locale("", String.valueOf(map.getSelectedCountries().get(0)))).getCurrencyCode());
+        try {
+            System.out.println(map.getSelectedCountries());
+            System.out.println(Currency.getInstance(new Locale("", String.valueOf(map.getSelectedCountries().get(0)))).getCurrencyCode());
 
-        String currencyCode = Currency.getInstance(new Locale("", String.valueOf(map.getSelectedCountries().get(0)))).getCurrencyCode();
-        Locale loc = new Locale("", String.valueOf(map.getSelectedCountries().get(0)));
-        String countryName = loc.getDisplayCountry();
+            String currencyCode = Currency.getInstance(new Locale("", String.valueOf(map.getSelectedCountries().get(0)))).getCurrencyCode();
+            Locale loc = new Locale("", String.valueOf(map.getSelectedCountries().get(0)));
+            String countryName = loc.getDisplayCountry();
 
 
-        MainWIndowView view = (MainWIndowView) StageManagement.controllers.get("MainWindow");
-        MainWindowController controller = view.getController();
+            MainWIndowView view = (MainWIndowView) StageManagement.controllers.get("MainWindow");
+            MainWindowController controller = view.getController();
 
-//        controller.addCurrencyToListView(currencyCode, countryName);
-        controller.addCountry(countryName, currencyCode);
+            //        controller.addCurrencyToListView(currencyCode, countryName);
+            controller.addCountry(countryName, currencyCode);
 
-//        StageManagement.stages.put("MapStage", (Stage) map.getScene().getWindow());
-//        StageManagement.controllers.put("MapController", this);
+            StageManagement.stages.put("MapStage", (Stage) map.getScene().getWindow());
+            StageManagement.controllers.put("MapController", this);
+        } catch (Exception e) {
+            System.out.println("No country selected");
+        }
     }
 }
