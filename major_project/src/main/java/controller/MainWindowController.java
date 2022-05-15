@@ -85,11 +85,13 @@ public class MainWindowController {
     }
 
     public void remove(String currencyCode) {
-        for (String key : countries.keySet()) {
-            if (countries.get(key).equals(currencyCode)) {
-                countries.remove(key);
-                this.mainWindowView.updateListView(this.countries);
-            }
-        }
+//        for (String key : countries.keySet()) {
+//            if (countries.get(key).equals(currencyCode)) {
+//                countries.remove(key);
+//                this.mainWindowView.updateListView(this.countries);
+//            }
+//        }
+        this.countries.remove(currencyCode);
+        this.mainWindowView.updateListView(this.countries);
     }
 }
