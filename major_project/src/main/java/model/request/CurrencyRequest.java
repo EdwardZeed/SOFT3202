@@ -1,9 +1,14 @@
 package model.request;
 
+import model.Convert;
+import model.Rate;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 
 public interface CurrencyRequest {
-    public HttpResponse<String> getConvertResponse(String from, String to, double amount);
-    public HttpResponse<String> getRateResponse(String from, String to);
+    public Convert getConvert(String from, String to, double amount) throws URISyntaxException, IOException, InterruptedException;
+    public Rate getRate(String from, String to) throws URISyntaxException, IOException, InterruptedException;
 
 }

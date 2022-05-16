@@ -1,46 +1,112 @@
 package model;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import model.CurrencyScoop;
+
 import model.request.*;
 
-import java.net.http.HttpResponse;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 
 
-public class CurrencyScoopAPI implements CurrencyScoop {
+public class CurrencyScoopAPI {
     private CurrencyRequest currencyReq = new CurrencyRequestOnline();
+    private Database db;
+    private boolean isOnline;
+    private HashMap<String, String> countries = new HashMap<>();
 
     public CurrencyScoopAPI(boolean isOnline) {
+        this.isOnline = isOnline;
+
         if (!isOnline) {
             this.currencyReq = new CurrencyRequestOffline();
+        }
+        if (isOnline) {
+            this.db = new Database();
         }
 
     }
 
-    public double convert(String from, String to, double amount)  {
+    public Convert convert(String from, String to, double amount) throws URISyntaxException, IOException, InterruptedException {
+        Convert result = currencyReq.getConvert(from, to, amount);
 
-        HttpResponse<String> response = currencyReq.getConvertResponse(from, to, amount);
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
-        double value = jsonObject.getAsJsonObject("response").get("value").getAsDouble();
-        return value;
+        return result;
+    }
+
+    public double calculateResult(double amount, double rate) {
+        return amount * rate;
     }
 
 
 
-    public double getRate(String from, String to)  {
+    public Rate getRate(String from, String to, boolean update) throws URISyntaxException, IOException, InterruptedException {
+        double fromDB = db.getRate(from, to);
 
-        HttpResponse<String> response = currencyReq.getRateResponse(from, to);
-        Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
-        double rate = jsonObject.getAsJsonObject("response").getAsJsonObject("rates").get(to).getAsDouble();
-        System.out.println(jsonObject.getAsJsonObject("response").getAsJsonObject("rates"));
-        return rate;
+        if (update || fromDB == 0) {
+            Rate fromAPI = currencyReq.getRate(from, to);
+
+            if (this.isOnline) {
+                db.addConversation(from, to, fromAPI.getRate());
+            }
+            return fromAPI;
+        }
+
+
+        return new Rate(from, to, fromDB);
 
     }
+
+    public boolean cacheHit(String from, String to) {
+        return db.getRate(from, to) != 0;
+    }
+
+    public void clearCache(){
+        db.clear();
+    }
+
 
     public void setRequest(CurrencyRequest currencyReq) {
         this.currencyReq = currencyReq;
+    }
+
+    public void addCountry(String countryName, String currencyCode) {
+        if (!countries.containsKey(countryName)) {
+            countries.put(countryName, currencyCode);
+        }
+
+    }
+
+    public void remove(String currencyCode) {
+
+        this.countries.remove(currencyCode);
+
+    }
+
+    public void clear() {
+        this.countries.clear();
+
+    }
+
+    public HashMap<String, String> getCountries() {
+        return countries;
+    }
+
+    public String getFromCountry(String currency){
+        String country = "";
+        for (String key : countries.keySet()) {
+            if (countries.get(key).equals(currency)) {
+                country = key;
+            }
+        }
+        return country;
+    }
+
+    public String getToCountry(String currency){
+        String country = "";
+        for (String key : countries.keySet()) {
+            if (countries.get(key).equals(currency)) {
+                country = key;
+            }
+        }
+        return country;
     }
 }

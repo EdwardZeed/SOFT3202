@@ -10,7 +10,7 @@ repositories {
 }
 javafx {
     version = "17.0.2"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml' , 'javafx.media' , 'javafx.graphics'  ]
 }
 dependencies  {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
@@ -36,7 +36,7 @@ sourceSets {
     main {
         resources {
             srcDirs = ["src/main/java"]
-            includes = ["**/*.fxml"]
+            includes = ["**/*.fxml", "**/*.css"]
         }
     }
 }

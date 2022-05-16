@@ -1,5 +1,7 @@
 package model.request;
 
+import model.PastebinResult;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -8,9 +10,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class PastebinRequestOnline implements PastebinRequest {
-//    private static String api_dev_key = "j5l8W7SgCxRRS7PNxWV8g6j8KX7m43x0";
+    //    private static String api_dev_key = "j5l8W7SgCxRRS7PNxWV8g6j8KX7m43x0";
     private static String PASTEBIN_API_KEY = System.getenv("PASTEBIN_API_KEY");
-    public HttpResponse<String> getPastebinResponse(String text)  {
+    public PastebinResult getPastebinResponse(String text)  {
         try {
             HttpRequest request = HttpRequest.newBuilder(new URI("https://pastebin.com/api/api_post.php"))
                     .header("Content-Type", "application/x-www-form-urlencoded")
@@ -20,7 +22,8 @@ public class PastebinRequestOnline implements PastebinRequest {
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return response;
+
+            return new PastebinResult(response.body());
         }
         catch (URISyntaxException | IOException | InterruptedException e) {
             e.printStackTrace();
@@ -28,4 +31,6 @@ public class PastebinRequestOnline implements PastebinRequest {
         return null;
 
     }
+
+
 }

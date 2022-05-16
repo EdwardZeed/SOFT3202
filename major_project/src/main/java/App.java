@@ -1,5 +1,6 @@
-import controller.MainWindowController;
-import controller.StageManagement;
+import presenter.StageManagement;
+import javafx.scene.layout.Pane;
+import view.MainWindowView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,8 +13,12 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+        FXMLLoader MapLoader = new FXMLLoader(getClass().getResource("/view/MapWindow.fxml"));
+        Pane mapRoot = MapLoader.load();
+        StageManagement.loaders.put("MapWindow", MapLoader);
+        StageManagement.panes.put("MapWindow", mapRoot);
         Scene scene = new Scene(loader.load());
-        MainWindowController controller = loader.getController();
+        MainWindowView controller = loader.getController();
 
         boolean currencyStatus = true;
         boolean pastebinStatus = true;

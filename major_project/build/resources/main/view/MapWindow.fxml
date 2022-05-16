@@ -3,8 +3,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import org.controlsfx.control.WorldMapView?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MapController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="bg_colour" stylesheets="@light_mode.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MapView">
    <children>
-      <WorldMapView fx:id="map" layoutX="-145.0" layoutY="-6.0" onMouseClicked="#ShowCountry" prefHeight="565.0" prefWidth="1011.0" />
+      <WorldMapView fx:id="map" layoutX="-145.0" layoutY="-6.0" onMouseClicked="#ShowCountry" prefHeight="565.0" prefWidth="1011.0" styleClass="map_colour" />
    </children>
 </AnchorPane>
