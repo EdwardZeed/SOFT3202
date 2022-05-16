@@ -2,7 +2,6 @@ import model.*;
 import model.request.*;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -13,9 +12,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class ModelOnlineTest {
-
     @Test
-    public void testConvertOnline()  {
+    public void testConvertOnline() {
         CurrencyRequestOnline mockRequestOnline = mock(CurrencyRequestOnline.class);
 
         Convert convert = new Convert(0.94720926, "USD", "EUR");
@@ -83,7 +81,7 @@ public class ModelOnlineTest {
 
 
     @Test
-    public void testConvertOffline() throws URISyntaxException, IOException, InterruptedException {
+    public void testConvertOffline(){
         CurrencyRequestOffline mockRequestOnline = mock(CurrencyRequestOffline.class);
 
         Convert convert = new Convert(0.94720926, "USD", "EUR");
@@ -92,7 +90,12 @@ public class ModelOnlineTest {
         CurrencyScoopAPI api = new CurrencyScoopAPI(false);
         api.setRequest(mockRequestOnline);
 
-        Convert result = api.convert("USD", "EUR", 1);
+        Convert result;
+        try {
+            result = api.convert("USD", "EUR", 1);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         assertEquals(result.getResult(), 0.94720926);
         assertEquals(result.getFrom(), "USD");
@@ -115,7 +118,7 @@ public class ModelOnlineTest {
 
         Rate result;
         try {
-            result = api.getRate("USD", "EUR");
+            result = api.getRate("USD", "EUR", true);
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -135,7 +138,7 @@ public class ModelOnlineTest {
         CurrencyScoopAPI api = new CurrencyScoopAPI(true);
         Rate result;
         try {
-            result = api.getRate("US", "EUR");
+            result = api.getRate("US", "EUR", true);
         }
         catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -144,9 +147,9 @@ public class ModelOnlineTest {
         assertEquals(result.getFrom(), "US");
         assertEquals(result.getTo(), "EUR");
 
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EU"));
+        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EU", true));
 
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("USD", "EU"));
+        assertThrows(IllegalArgumentException.class, () -> api.getRate("USD", "EU", true));
     }
 
     @Test
@@ -160,7 +163,7 @@ public class ModelOnlineTest {
 
         Rate result;
         try {
-            result = api.getRate("USD", "EUR");
+            result = api.getRate("USD", "EUR", true);
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -195,4 +198,45 @@ public class ModelOnlineTest {
         assertEquals(api.createPastin("this is from test suits").getURI(), "https://pastebin.com/NR2Gp4JM");
         verify(mockRequestOffline, times(1)).getPastebinResponse(anyString());
     }
+
+    @Test
+    public void testAddCurrency(){
+        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
+        api.addCountry("United States", "USD");
+        api.addCountry("Australia", "AUD");
+
+        assertEquals(2, api.getCountries().size());
+        assertEquals("USD", api.getCountries().get("United States"));
+        assertEquals("AUD", api.getCountries().get("Australia"));
+
+        api.addCountry("United States", "USD");
+        assertEquals(2, api.getCountries().size());
+        assertEquals("USD", api.getCountries().get("United States"));
+        assertEquals("AUD", api.getCountries().get("Australia"));
+
+    }
+
+    @Test
+    public void testRemoveCurrency(){
+        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
+        api.addCountry("United States", "USD");
+        api.addCountry("Australia", "AUD");
+        assertEquals(2, api.getCountries().size());
+
+        api.remove("Australia");
+
+        assertEquals(1, api.getCountries().size());
+        assertEquals("USD", api.getCountries().get("United States"));
+        assertEquals(null, api.getCountries().get("Australia"));
+    }
+
+    @Test
+    public void testGetCountries(){
+        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
+        api.addCountry("United States", "USD");
+        api.addCountry("Australia", "AUD");
+        assertEquals("United States", api.getFromCountry("USD"));
+        assertEquals("Australia", api.getToCountry("AUD"));
+    }
+
 }

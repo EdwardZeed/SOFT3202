@@ -7,7 +7,9 @@ import java.util.*;
  * It should definitely be decomposed into smaller elements, but is retained here as an overly complex class to make
  * the borders and appropriate responsibilities between the View and the Model more obvious.
  */
-public class GameBoard {
+public class
+
+GameBoard {
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
 

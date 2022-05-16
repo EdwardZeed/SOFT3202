@@ -1,12 +1,11 @@
 package view;
 
-import controller.MainWindowController;
-import controller.StageManagement;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import org.controlsfx.control.WorldMapView;
+import presenter.MainWindowPresenter;
+import presenter.StageManagement;
 
-import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -15,12 +14,8 @@ public class MapView {
     private WorldMapView map;
 
 
-    public void ShowCountry() throws IOException {
-        showCurrencyInListView();
 
-    }
-
-    private void showCurrencyInListView() throws IOException {
+    public void ShowCountry() {
         try {
             System.out.println(map.getSelectedCountries());
             System.out.println(Currency.getInstance(new Locale("", String.valueOf(map.getSelectedCountries().get(0)))).getCurrencyCode());
@@ -29,10 +24,8 @@ public class MapView {
             Locale loc = new Locale("", String.valueOf(map.getSelectedCountries().get(0)));
             String countryName = loc.getDisplayCountry();
 
-
-            MainWIndowView view = (MainWIndowView) StageManagement.controllers.get("MainWindow");
-            MainWindowController controller = view.getController();
-
+            MainWindowView view = (MainWindowView) StageManagement.controllers.get("MainWindow");
+            MainWindowPresenter controller = view.getController();
             //        controller.addCurrencyToListView(currencyCode, countryName);
             controller.addCountry(countryName, currencyCode);
 
@@ -41,5 +34,9 @@ public class MapView {
         } catch (Exception e) {
             System.out.println("No country selected");
         }
+
+
     }
+
+
 }

@@ -59,6 +59,7 @@ public class CurrencyRequestOffline implements CurrencyRequest {
                 return null;
             }
         };
+
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
         double value = jsonObject.getAsJsonObject("response").get("value").getAsDouble();
@@ -116,8 +117,9 @@ public class CurrencyRequestOffline implements CurrencyRequest {
         JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
         double rate = jsonObject.getAsJsonObject("response").getAsJsonObject("rates").get(to).getAsDouble();
         System.out.println(jsonObject.getAsJsonObject("response").getAsJsonObject("rates"));
+        Rate rateObj = new Rate(from, to, rate);
 
-        return new Rate(from, to, rate);
+        return rateObj;
     }
 
 

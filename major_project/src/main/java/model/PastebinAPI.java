@@ -18,8 +18,8 @@ public class PastebinAPI implements Pastebin {
 
 
     public PastebinResult createPastin(String text)  {
-        PastebinResult result = request.getPastebinResponse(text);
-        return result;
+
+        return request.getPastebinResponse(text);
 
     }
 
