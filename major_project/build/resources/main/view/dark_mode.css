@@ -27,6 +27,9 @@
 .list-view .cell {
   -fx-background-color: rgb(149, 161, 153);
 }
+.list-view .scroll-bar {
+  -fx-background-color: rgb(149, 161, 153);
+}
 .map_colour {
   -fx-background-color: black;
 }

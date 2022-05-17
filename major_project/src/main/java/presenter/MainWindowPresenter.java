@@ -47,9 +47,7 @@ public class MainWindowPresenter {
 
         Stage mapStage = StageManagement.stages.get("MapStage");
 
-        mapStage.setOnCloseRequest(event -> {
-            this.mainWindowView.rebuildListView(this.currencyScoopAPI.getCountries());
-        });
+        mapStage.setOnCloseRequest(event -> this.mainWindowView.rebuildListView(this.currencyScoopAPI.getCountries()));
 
     }
 
@@ -131,13 +129,13 @@ public class MainWindowPresenter {
                 mainWindowView.setProgressIndicator(true);
                 System.out.println(Thread.currentThread().getName());
 
-                Rate rate;
-                Convert result;
+                Rate rate = null;
+                Convert result = null;
                 try {
                     rate = currencyScoopAPI.getRate(finalFromCurrency, finalToCurrency, true);
                     result = currencyScoopAPI.convert(finalFromCurrency, finalToCurrency, finalAmount);
-                } catch (URISyntaxException | IOException | InterruptedException e) {
-                    throw new RuntimeException(e);
+                } catch (URISyntaxException | IOException | InterruptedException | IllegalArgumentException e) {
+                    mainWindowView.displayError("invalid currency");
                 }
 
                 Result message = new Result(rate, result);
@@ -207,4 +205,5 @@ public class MainWindowPresenter {
             this.mainWindowView.setDarkMode();
         }
     }
+
 }

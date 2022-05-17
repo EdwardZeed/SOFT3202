@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ModelTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2022-05-17T11:00:51" hostname="vlan-2661-10-19-243-85.student.wireless.sydney.edu.au" time="0.638">
+  <properties/>
+  <testcase name="testGetCountries()" classname="ModelTest" time="0.007"/>
+  <testcase name="testClearCountries()" classname="ModelTest" time="0.0"/>
+  <testcase name="testAddCurrency()" classname="ModelTest" time="0.001"/>
+  <testcase name="testPastebinOnline()" classname="ModelTest" time="0.466"/>
+  <testcase name="testConvertOnlineInvalid()" classname="ModelTest" time="0.118"/>
+  <testcase name="testConvertOnline()" classname="ModelTest" time="0.014"/>
+  <testcase name="testRateOffline()" classname="ModelTest" time="0.014"/>
+  <testcase name="testConvertOffline()" classname="ModelTest" time="0.002"/>
+  <testcase name="testPastebinOffline()" classname="ModelTest" time="0.008"/>
+  <testcase name="testRateOnline()" classname="ModelTest" time="0.003"/>
+  <testcase name="testGetRateInvalid()" classname="ModelTest" time="0.002"/>
+  <testcase name="testRemoveCurrency()" classname="ModelTest" time="0.0"/>
+  <system-out><![CDATA[Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+A new conversation has been added.
+Database already exists
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

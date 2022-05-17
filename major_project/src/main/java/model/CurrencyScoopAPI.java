@@ -1,10 +1,13 @@
 package model;
 
 
-import model.request.*;
+import model.request.CurrencyRequest;
+import model.request.CurrencyRequestOffline;
+import model.request.CurrencyRequestOnline;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Currency;
 import java.util.HashMap;
 
 
@@ -26,7 +29,12 @@ public class CurrencyScoopAPI {
 
     }
 
-    public Convert convert(String from, String to, double amount) throws URISyntaxException, IOException, InterruptedException {
+    public Convert convert(String from, String to, double amount) throws URISyntaxException, IOException, InterruptedException, IllegalArgumentException {
+        if (!Currency.getAvailableCurrencies().contains(Currency.getInstance(from)) || !Currency.getAvailableCurrencies().contains(Currency.getInstance(to))) {
+            System.out.println("Invalid currency");
+            throw new IllegalArgumentException("Invalid currency code");
+        }
+
         Convert result = currencyReq.getConvert(from, to, amount);
 
         return result;
@@ -38,18 +46,27 @@ public class CurrencyScoopAPI {
 
 
 
-    public Rate getRate(String from, String to, boolean update) throws URISyntaxException, IOException, InterruptedException {
+    public Rate getRate(String from, String to, boolean update) throws URISyntaxException, IOException, InterruptedException, IllegalArgumentException {
+        if (!Currency.getAvailableCurrencies().contains(Currency.getInstance(from)) || !Currency.getAvailableCurrencies().contains(Currency.getInstance(to))) {
+            System.out.println("Invalid currency");
+            throw new IllegalArgumentException("Invalid currency code");
+        }
+
+
         double fromDB = db.getRate(from, to);
 
-        if (update || fromDB == 0) {
+        if (update && this.isOnline) {
             Rate fromAPI = currencyReq.getRate(from, to);
 
             if (this.isOnline) {
                 db.addConversation(from, to, fromAPI.getRate());
             }
             return fromAPI;
+        }else{
+            if (!this.isOnline) {
+                return currencyReq.getRate(from, to);
+            }
         }
-
 
         return new Rate(from, to, fromDB);
 
@@ -109,4 +126,7 @@ public class CurrencyScoopAPI {
         }
         return country;
     }
+
+
+
 }

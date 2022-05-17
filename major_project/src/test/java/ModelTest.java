@@ -11,7 +11,7 @@ import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class ModelOnlineTest {
+public class ModelTest {
     @Test
     public void testConvertOnline() {
         CurrencyRequestOnline mockRequestOnline = mock(CurrencyRequestOnline.class);
@@ -45,50 +45,23 @@ public class ModelOnlineTest {
     @Test
     public void testConvertOnlineInvalid()  {
         CurrencyScoopAPI api = new CurrencyScoopAPI(true);
-        Convert result1;
-        try {
-            result1 = api.convert("US", "EUR", 1);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        assertEquals(result1.getResult(), 0.0);
-        assertEquals(result1.getFrom(), "US");
-        assertEquals(result1.getTo(), "EUR");
 
-        Convert result2;
-        try {
-            result2 = api.convert("USD", "E", 1);
-        }
-        catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        assertEquals(result2.getResult(), 0.0);
-        assertEquals(result2.getFrom(), "USD");
-        assertEquals(result2.getTo(), "E");
-
-        Convert result3;
-        try {
-            result3 = api.convert("US", "EU", 1);
-        }
-        catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        assertEquals(result3.getResult(), 0.0);
-        assertEquals(result3.getFrom(), "US");
-        assertEquals(result3.getTo(), "EU");
+        assertThrows(IllegalArgumentException.class, () -> api.convert("US", "EUR", 1));
+        assertThrows(IllegalArgumentException.class, () -> api.convert("USD", "E", 1));
+        assertThrows(IllegalArgumentException.class, () -> api.convert("US", "EU", 1));
 
     }
 
 
     @Test
     public void testConvertOffline(){
-        CurrencyRequestOffline mockRequestOnline = mock(CurrencyRequestOffline.class);
+        CurrencyRequestOffline mockRequestOffline = mock(CurrencyRequestOffline.class);
 
         Convert convert = new Convert(0.94720926, "USD", "EUR");
-        when(mockRequestOnline.getConvert(anyString(), anyString(), anyDouble())).thenReturn(convert);
+        when(mockRequestOffline.getConvert(anyString(), anyString(), anyDouble())).thenReturn(convert);
 
         CurrencyScoopAPI api = new CurrencyScoopAPI(false);
-        api.setRequest(mockRequestOnline);
+        api.setRequest(mockRequestOffline);
 
         Convert result;
         try {
@@ -100,7 +73,8 @@ public class ModelOnlineTest {
         assertEquals(result.getResult(), 0.94720926);
         assertEquals(result.getFrom(), "USD");
         assertEquals(result.getTo(), "EUR");
-        verify(mockRequestOnline, times(1)).getConvert(anyString(), anyString(), anyDouble());
+        verify(mockRequestOffline, times(1)).getConvert(anyString(), anyString(), anyDouble());
+
     }
 
     @Test
@@ -136,20 +110,13 @@ public class ModelOnlineTest {
     @Test
     public void testGetRateInvalid(){
         CurrencyScoopAPI api = new CurrencyScoopAPI(true);
-        Rate result;
-        try {
-            result = api.getRate("US", "EUR", true);
-        }
-        catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        assertEquals(result.getRate(), 0.0);
-        assertEquals(result.getFrom(), "US");
-        assertEquals(result.getTo(), "EUR");
 
         assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EU", true));
 
         assertThrows(IllegalArgumentException.class, () -> api.getRate("USD", "EU", true));
+
+        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EUR", false));
+
     }
 
     @Test
@@ -161,17 +128,29 @@ public class ModelOnlineTest {
         CurrencyScoopAPI api = new CurrencyScoopAPI(false);
         api.setRequest(mockRequestOffline);
 
-        Rate result;
+        Rate result1;
+        Rate result2;
         try {
-            result = api.getRate("USD", "EUR", true);
+            result1 = api.getRate("USD", "EUR", true);
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(result.getRate(), 1);
-        assertEquals(result.getFrom(), "USD");
-        assertEquals(result.getTo(), "EUR");
+        assertEquals(result1.getRate(), 1);
+        assertEquals(result1.getFrom(), "USD");
+        assertEquals(result1.getTo(), "EUR");
         verify(mockRequestOffline, times(1)).getRate(anyString(), anyString());
+
+        try {
+            result2 = api.getRate("USD", "EUR", false);
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(result2.getRate(), 1);
+        assertEquals(result2.getFrom(), "USD");
+        assertEquals(result2.getTo(), "EUR");
+        verify(mockRequestOffline, times(2)).getRate(anyString(), anyString());
     }
 
     @Test
@@ -237,6 +216,16 @@ public class ModelOnlineTest {
         api.addCountry("Australia", "AUD");
         assertEquals("United States", api.getFromCountry("USD"));
         assertEquals("Australia", api.getToCountry("AUD"));
+    }
+
+    @Test
+    public void testClearCountries(){
+        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
+        api.addCountry("United States", "USD");
+        api.addCountry("Australia", "AUD");
+        assertEquals(2, api.getCountries().size());
+        api.clear();
+        assertEquals(0, api.getCountries().size());
     }
 
 }
