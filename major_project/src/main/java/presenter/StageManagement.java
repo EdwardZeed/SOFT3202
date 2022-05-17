@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class StageManagement {
     public static HashMap<String, Stage> stages = new HashMap<>();
-    public static HashMap<String, Object> controllers = new HashMap<>();
+    public static HashMap<String, Object> views = new HashMap<>();
     public static HashMap<String, FXMLLoader> loaders = new HashMap<>();
     public static HashMap<String, Pane> panes = new HashMap<>();
 }

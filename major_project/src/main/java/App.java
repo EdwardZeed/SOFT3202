@@ -15,8 +15,10 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
         FXMLLoader MapLoader = new FXMLLoader(getClass().getResource("/view/MapWindow.fxml"));
         Pane mapRoot = MapLoader.load();
+
         StageManagement.loaders.put("MapWindow", MapLoader);
         StageManagement.panes.put("MapWindow", mapRoot);
+
         Scene scene = new Scene(loader.load());
         MainWindowView controller = loader.getController();
 

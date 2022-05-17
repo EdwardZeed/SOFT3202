@@ -1,19 +1,19 @@
 package view;
 
 
-import presenter.MainWindowPresenter;
-import presenter.StageManagement;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import presenter.MainWindowPresenter;
+import presenter.StageManagement;
 
 import java.awt.*;
 import java.io.File;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class MainWindowView {
     @FXML
@@ -41,7 +42,8 @@ public class MainWindowView {
     private MediaPlayer mediaPlayer;
 
     private boolean isLight = true;
-    private MainWindowPresenter controller;
+    Pane map = StageManagement.panes.get("MapWindow");
+    private MainWindowPresenter presenter;
     File light = new File("src/main/java/view/light_mode.css");
     File dark = new File("src/main/java/view/dark_mode.css");
 
@@ -59,26 +61,26 @@ public class MainWindowView {
             mediaPlayer.seek(Duration.ZERO);
             mediaPlayer.play();
         });
-        controller = new MainWindowPresenter(this);
+        presenter = new MainWindowPresenter(this);
         progressIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
         progressIndicator.setPrefHeight(50);
         progressIndicator.setPrefWidth(50);
         progressIndicator.setVisible(false);
     }
 
-    public MainWindowPresenter getController() {
-        return controller;
+    public MainWindowPresenter getPresenter() {
+        return presenter;
     }
 
 
     public void setStatus(boolean currencyOnline, boolean pastebinOnline) {
 
-        this.controller.setStatus(currencyOnline, pastebinOnline);
+        this.presenter.setStatus(currencyOnline, pastebinOnline);
     }
 
     public void AddCurrency(){
         System.out.println(this);
-        this.controller.showMapWindow();
+        this.presenter.showMapWindow();
 
     }
 
@@ -109,7 +111,7 @@ public class MainWindowView {
             String fromCurrency = from.getSelectionModel().getSelectedItem();
             String toCurrency = to.getSelectionModel().getSelectedItem();
             String amount = this.amount.getText();
-            this.controller.getResult(fromCurrency, toCurrency, amount);
+            this.presenter.getResult(fromCurrency, toCurrency, amount);
         } catch (URISyntaxException | IOException | InterruptedException e) {
             displayError("no result");
         }
@@ -141,10 +143,19 @@ public class MainWindowView {
 
     }
 
+    public Optional<ButtonType> displayCacheHit(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Currency Converter");
+        alert.setContentText("cache hit for this data – use cache, or request fresh data from the API?");
+        ButtonType buttonTypeOne = new ButtonType("Use Cache", ButtonBar.ButtonData.YES);
+        ButtonType buttonTypeTwo = new ButtonType("Request Fresh Data", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+        return alert.showAndWait();
+    }
 
 
     public void handleClear(){
-        this.controller.clear();
+        this.presenter.clear();
     }
 
     public void handleRemove() {
@@ -152,42 +163,22 @@ public class MainWindowView {
             String selected = listView.getSelectionModel().getSelectedItem();
             String countryName = selected.substring(0, selected.indexOf("\n"));
 
-            this.controller.remove(countryName);
+            this.presenter.remove(countryName);
         } catch (Exception e) {
             this.displayError("Please select a country to remove");
         }
     }
 
     public void handleClearCache(){
-        this.controller.clearCache();
+        this.presenter.clearCache();
     }
 
     public void handleBGM(){
-        if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-            System.out.println("pause");
-            mediaPlayer.pause();
-        }
-        else{
-            System.out.println("play");
-            mediaPlayer.play();
-        }
+        this.presenter.controlBGM(mediaPlayer.getStatus());
     }
 
     public void handleMode(){
-        isLight = !isLight;
-        Pane map = StageManagement.panes.get("MapWindow");
-        if (isLight) {
-            bg.getStylesheets().remove(dark.toURI().toString());
-            bg.getStylesheets().add(light.toURI().toString());
-            map.getStylesheets().remove(dark.toURI().toString());
-            map.getStylesheets().add(light.toURI().toString());
-        }
-        else{
-            bg.getStylesheets().remove(light.toURI().toString());
-            bg.getStylesheets().add(dark.toURI().toString());
-            map.getStylesheets().remove(light.toURI().toString());
-            map.getStylesheets().add(dark.toURI().toString());
-        }
+        this.presenter.controlMode(isLight);
     }
 
     public void displayError(String error){
@@ -209,6 +200,31 @@ public class MainWindowView {
 
     public void enableConvert(){
         convertbtn.setDisable(false);
+    }
+
+    public void pause(){
+        mediaPlayer.pause();
+    }
+    public void play(){
+        mediaPlayer.play();
+    }
+
+    public void setDarkMode() {
+        bg.getStylesheets().remove(light.toURI().toString());
+        bg.getStylesheets().add(dark.toURI().toString());
+        map.getStylesheets().remove(light.toURI().toString());
+        map.getStylesheets().add(dark.toURI().toString());
+    }
+
+    public void setLightMode() {
+        bg.getStylesheets().remove(dark.toURI().toString());
+        bg.getStylesheets().add(light.toURI().toString());
+        map.getStylesheets().remove(dark.toURI().toString());
+        map.getStylesheets().add(light.toURI().toString());
+    }
+
+    public void setMode(boolean isLight) {
+        this.isLight = isLight;
     }
 }
 

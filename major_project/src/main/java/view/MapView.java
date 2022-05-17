@@ -1,6 +1,8 @@
 package view;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.controlsfx.control.WorldMapView;
 import presenter.MainWindowPresenter;
@@ -13,6 +15,9 @@ public class MapView {
     @FXML
     private WorldMapView map;
 
+    public void initialize(){
+        StageManagement.views.put("MapWindow", this);
+    }
 
 
     public void ShowCountry() {
@@ -24,19 +29,34 @@ public class MapView {
             Locale loc = new Locale("", String.valueOf(map.getSelectedCountries().get(0)));
             String countryName = loc.getDisplayCountry();
 
-            MainWindowView view = (MainWindowView) StageManagement.controllers.get("MainWindow");
-            MainWindowPresenter controller = view.getController();
-            //        controller.addCurrencyToListView(currencyCode, countryName);
-            controller.addCountry(countryName, currencyCode);
+            MainWindowView view = (MainWindowView) StageManagement.views.get("MainWindow");
+            MainWindowPresenter presenter = view.getPresenter();
+            //        presenter.addCurrencyToListView(currencyCode, countryName);
+            presenter.addCountry(countryName, currencyCode);
 
             StageManagement.stages.put("MapStage", (Stage) map.getScene().getWindow());
-            StageManagement.controllers.put("MapController", this);
+            StageManagement.views.put("MapController", this);
         } catch (Exception e) {
             System.out.println("No country selected");
         }
 
-
     }
+
+    public void buildMap(){
+        Pane root = StageManagement.panes.get("MapWindow");
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        StageManagement.stages.put("MapStage", stage);
+        stage.show();
+    }
+
+    public void rebuildMap(){
+        Stage stage = StageManagement.stages.get("MapStage");
+        stage.show();
+    }
+
+
 
 
 }

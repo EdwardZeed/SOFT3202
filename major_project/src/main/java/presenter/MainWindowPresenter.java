@@ -1,14 +1,12 @@
 package presenter;
 
 import javafx.concurrent.Task;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import model.*;
 import view.MainWindowView;
+import view.MapView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -34,41 +32,29 @@ public class MainWindowPresenter {
 
     public void showMapWindow() {
 
-        Pane root = StageManagement.panes.get("MapWindow");
-
-        Stage stage;
-        Scene scene;
-        if (root.getScene() != null) {
-            scene = root.getScene();
-        }
-        else{
-            scene = new Scene(root);
-        }
-        if (root.getScene().getWindow() != null) {
-            stage = (Stage) root.getScene().getWindow();
-        }
-        else{
-            stage = new Stage();
-        }
-
-        stage.setScene(scene);
-        stage.show();
-
-
 //        the following code is modified from https://blog.birost.com/a?ID=00550-7ba27155-686d-4aef-8504-3e5a73dc6ad5
-        StageManagement.stages.put("MapWindow", stage);
-        StageManagement.controllers.put("MainWindow", this.mainWindowView);
 
+        StageManagement.views.put("MainWindow", this.mainWindowView);
 
-        stage.setOnCloseRequest(event -> {
-//            this.mainWindowView.showCurrency();
+        if (StageManagement.stages.get("MapStage") == null) {
+            MapView mapView = (MapView) StageManagement.views.get("MapWindow");
+            mapView.buildMap();
+        }
+        else{
+            MapView mapView = (MapView) StageManagement.views.get("MapWindow");
+            mapView.rebuildMap();
+        }
+
+        Stage mapStage = StageManagement.stages.get("MapStage");
+
+        mapStage.setOnCloseRequest(event -> {
             this.mainWindowView.rebuildListView(this.currencyScoopAPI.getCountries());
         });
 
     }
 
     public void getResult(String fromCurrency, String toCurrency, String amount) throws URISyntaxException, IOException, InterruptedException {
-        double amount_num = 0;
+        double amount_num;
         try{
             amount_num = Double.parseDouble(amount);
         }catch (Exception e){
@@ -92,14 +78,9 @@ public class MainWindowPresenter {
         String toCountry = currencyScoopAPI.getToCountry(toCurrency);
         if (currencyScoopAPI.cacheHit(fromCurrency, toCurrency) && this.isOnline) {
             System.out.println("cache hit");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Currency Converter");
-            alert.setContentText("cache hit for this data – use cache, or request fresh data from the API?");
-            ButtonType buttonTypeOne = new ButtonType("Use Cache", ButtonBar.ButtonData.YES);
-            ButtonType buttonTypeTwo = new ButtonType("Request Fresh Data", ButtonBar.ButtonData.NO);
-            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
-            Optional<ButtonType> resultSet = alert.showAndWait();
-            if (resultSet.get() == buttonTypeOne) {
+            Optional<ButtonType> resultSet = this.mainWindowView.displayCacheHit();
+
+            if (resultSet.get().getButtonData().getTypeCode().equals("Y")) {
                 System.out.println("user chose to use cache");
                 rate = currencyScoopAPI.getRate(fromCurrency, toCurrency, false).getRate();
                 result = currencyScoopAPI.calculateResult(amount_num, rate);
@@ -205,5 +186,25 @@ public class MainWindowPresenter {
         this.currencyScoopAPI.remove(currencyCode);
 //        this.mainWindowView.updateListView(this.currencyScoopAPI.getCountries());
         this.mainWindowView.rebuildListView(this.currencyScoopAPI.getCountries());
+    }
+
+    public void controlBGM(MediaPlayer.Status status) {
+        if(status == MediaPlayer.Status.PLAYING){
+            this.mainWindowView.pause();
+        }else{
+            this.mainWindowView.play();
+        }
+    }
+
+
+    public void controlMode(boolean isLight) {
+        isLight = !isLight;
+        this.mainWindowView.setMode(isLight);
+        if (isLight) {
+            this.mainWindowView.setLightMode();
+        }
+        else{
+            this.mainWindowView.setDarkMode();
+        }
     }
 }

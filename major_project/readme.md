@@ -9,3 +9,7 @@ variable name of Pastebin is PASTEBIN_API_KEY
 variable name of input API(CurrencyScoop) is INPUT_API_KEY
 # level of features I'm trying to implement
 I'm trying to implement pass level
+# milestone 1 resubmission
+SHA: 403d502ff41b458f7febeaba975dc72b8eb9d239
+
+URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/403d502ff41b458f7febeaba975dc72b8eb9d239

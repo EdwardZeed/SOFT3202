@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import org.controlsfx.control.WorldMapView?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="bg_colour" stylesheets="@light_mode.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MapView">
    <children>
-      <WorldMapView fx:id="map" layoutX="-145.0" layoutY="-6.0" onMouseClicked="#ShowCountry" prefHeight="565.0" prefWidth="1011.0" styleClass="map_colour" />
+      <WorldMapView fx:id="map" layoutX="-145.0" layoutY="-6.0" onMouseClicked="#ShowCountry" prefHeight="565.0" prefWidth="1011.0">
+         <styleClass>
+            <String fx:value="map_colour" />
+            <String fx:value="tooltip" />
+            <String fx:value="tooltiptext" />
+         </styleClass></WorldMapView>
    </children>
 </AnchorPane>
