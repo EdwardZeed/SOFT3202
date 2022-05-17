@@ -13,8 +13,8 @@ I'm trying to implement pass level
  SHA: 403d502ff41b458f7febeaba975dc72b8eb9d239
  URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/403d502ff41b458f7febeaba975dc72b8eb9d239
 # milestone 2
-SHA: 72442a5a7beedd9f0264365fbb28e5ef9704d063
-URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/72442a5a7beedd9f0264365fbb28e5ef9704d063
+SHA: a5984fb25b1f3929963593565ef3591a3c1eafb2
+URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/a5984fb25b1f3929963593565ef3591a3c1eafb2
 # milestone 2 implementation
 Hurdle: implemented all the required features in hurdle
 Pass: model is fully tested and have model-view separation
