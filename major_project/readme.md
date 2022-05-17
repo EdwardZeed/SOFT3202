@@ -12,3 +12,13 @@ I'm trying to implement pass level
 # milestone 1 resubmission
  SHA: 403d502ff41b458f7febeaba975dc72b8eb9d239
  URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/403d502ff41b458f7febeaba975dc72b8eb9d239
+# milestone 2
+SHA: 72442a5a7beedd9f0264365fbb28e5ef9704d063
+URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/commit/72442a5a7beedd9f0264365fbb28e5ef9704d063
+# milestone 2 implementation
+Hurdle: implemented all the required features in hurdle
+Pass: model is fully tested and have model-view separation
+Credit: have cache. implemented theme song and dark mode
+Distinction: implemented concurrency and spinning progress indicator
+# n-tier architecture
+implement mode-view-presenter architecture
