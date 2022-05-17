@@ -127,6 +127,7 @@ public class CurrencyScoopAPI {
         return country;
     }
 
-
-
+    public void setDb(Database db) {
+        this.db = db;
+    }
 }

@@ -80,6 +80,7 @@ public class ModelTest {
     @Test
     public void testRateOnline() {
         CurrencyRequestOnline mockRequestOnline = mock(CurrencyRequestOnline.class);
+        Database mockDatabase = mock(Database.class);
 
         Rate rate = new Rate("USD","EUR", 0.9463667);
         try {
@@ -89,6 +90,7 @@ public class ModelTest {
         }
         CurrencyScoopAPI api = new CurrencyScoopAPI(true);
         api.setRequest(mockRequestOnline);
+        api.setDb(mockDatabase);
 
         Rate result;
         try {
@@ -110,23 +112,28 @@ public class ModelTest {
     @Test
     public void testGetRateInvalid(){
         CurrencyScoopAPI api = new CurrencyScoopAPI(true);
+        Database mockDatabase = mock(Database.class);
+        api.setDb(mockDatabase);
 
         assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EU", true));
-
+        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EU", false));
         assertThrows(IllegalArgumentException.class, () -> api.getRate("USD", "EU", true));
-
+        assertThrows(IllegalArgumentException.class, () -> api.getRate("USD", "EU", false));
         assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EUR", false));
+        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EUR", true));
 
     }
 
     @Test
     public void testRateOffline() {
         CurrencyRequestOffline mockRequestOffline = mock(CurrencyRequestOffline.class);
+        Database mockDatabase = mock(Database.class);
 
         Rate rate = new Rate("USD","EUR", 1);
         when(mockRequestOffline.getRate(anyString(), anyString())).thenReturn(rate);
         CurrencyScoopAPI api = new CurrencyScoopAPI(false);
         api.setRequest(mockRequestOffline);
+        api.setDb(mockDatabase);
 
         Rate result1;
         Rate result2;
