@@ -84,7 +84,7 @@ public class Database {
 
     }
 
-    public static boolean addConversation(String startCurrency, String endCurrency, double rate) {
+    public boolean addConversation(String startCurrency, String endCurrency, double rate) {
         setUp();
 
         String query = """

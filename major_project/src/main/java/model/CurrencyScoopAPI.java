@@ -55,17 +55,22 @@ public class CurrencyScoopAPI {
 
         double fromDB = db.getRate(from, to);
 
-        if (update && this.isOnline) {
+//        if (update && this.isOnline) {
+//            Rate fromAPI = currencyReq.getRate(from, to);
+//
+//            if (this.isOnline) {
+//                db.addConversation(from, to, fromAPI.getRate());
+//            }
+//            return fromAPI;
+//        }else{
+//            if (!this.isOnline) {
+//                return currencyReq.getRate(from, to);
+//            }
+//        }
+        if (update){
             Rate fromAPI = currencyReq.getRate(from, to);
-
-            if (this.isOnline) {
-                db.addConversation(from, to, fromAPI.getRate());
-            }
+            this.db.addConversation(from, to, fromAPI.getRate());
             return fromAPI;
-        }else{
-            if (!this.isOnline) {
-                return currencyReq.getRate(from, to);
-            }
         }
 
         return new Rate(from, to, fromDB);

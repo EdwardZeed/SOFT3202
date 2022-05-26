@@ -1,6 +1,7 @@
 package presenter;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -18,6 +19,7 @@ public class MainWindowPresenter {
 //    private HashMap<String, String> countries = new HashMap<>();
     private CurrencyScoopAPI currencyScoopAPI;
     private PastebinAPI pastebinAPI;
+    private Database db = new Database();
 
     public MainWindowPresenter(MainWindowView mainWindowView) {
         this.mainWindowView = mainWindowView;
@@ -70,32 +72,28 @@ public class MainWindowPresenter {
         }
 
 
-        double rate;
-        double result;
-        String fromCountry = currencyScoopAPI.getFromCountry(fromCurrency);
-        String toCountry = currencyScoopAPI.getToCountry(toCurrency);
         if (currencyScoopAPI.cacheHit(fromCurrency, toCurrency) && this.isOnline) {
             System.out.println("cache hit");
             Optional<ButtonType> resultSet = this.mainWindowView.displayCacheHit();
-
+            System.out.println(resultSet.get());
             if (resultSet.get().getButtonData().getTypeCode().equals("Y")) {
                 System.out.println("user chose to use cache");
-                rate = currencyScoopAPI.getRate(fromCurrency, toCurrency, false).getRate();
-                result = currencyScoopAPI.calculateResult(amount_num, rate);
-                String output = "from:" + fromCountry + "\nto:" + toCountry + "\nrate:" + rate + "\nstarting value:" + amount +"\nfinishing value:" + result;
-                String toOutput = pastebinAPI.createPastin(output).getURI();
-                this.mainWindowView.displayResult(rate, result, toOutput);
+//                rate = currencyScoopAPI.getRate(fromCurrency, toCurrency, false).getRate();
+//                result = currencyScoopAPI.calculateResult(amount_num, rate);
+//                String output = "from:" + fromCountry + "\nto:" + toCountry + "\nrate:" + rate + "\nstarting value:" + amount +"\nfinishing value:" + result;
+//                String toOutput = pastebinAPI.createPastin(output).getURI();
+//                this.mainWindowView.displayResult(rate, result);
+                Task<Result> task = this.getAPIRequestTask(amount_num,fromCurrency,toCurrency,this.mainWindowView,false);
+                Thread thread = new Thread(task);
+                thread.start();
             }
-            else{
+            else if (resultSet.get().getButtonData().getTypeCode().equals("N")) {
                 System.out.println("user chose to request fresh data");
-                System.out.println(this.mainWindowView);
 
-                Task<Result> task = this.getAPIRequestTask(amount_num, fromCurrency, toCurrency, this.mainWindowView);
-
+                Task<Result> task = this.getAPIRequestTask(amount_num, fromCurrency, toCurrency, this.mainWindowView, true);
 
                 Thread thread = new Thread(task);
                 thread.start();
-
 
             }
         }
@@ -103,23 +101,26 @@ public class MainWindowPresenter {
 //                System.out.println("no cache");
             if (this.isOnline) {
                 System.out.println("no cache, but online");
-                Task<Result> task = this.getAPIRequestTask(amount_num, fromCurrency, toCurrency, this.mainWindowView);
+                Task<Result> task = this.getAPIRequestTask(amount_num, fromCurrency, toCurrency, this.mainWindowView, true);
                 Thread thread = new Thread(task);
                 thread.start();
             }
             else{
-                System.out.println("no cache, no online");
-                result = currencyScoopAPI.convert(fromCurrency, toCurrency, amount_num).getResult();
-                rate = currencyScoopAPI.getRate(fromCurrency, toCurrency, false).getRate();
-                String output = "from:" + fromCountry + "\nto:" + toCountry + "\nrate:" + rate + "\nstarting value:" + amount +"\nfinishing value:" + result;
-                String toOutput = pastebinAPI.createPastin(output).getURI();
-                this.mainWindowView.displayResult(rate, result, toOutput);
+                System.out.println("no cache, not online");
+//                result = currencyScoopAPI.convert(fromCurrency, toCurrency, amount_num).getResult();
+//                rate = currencyScoopAPI.getRate(fromCurrency, toCurrency, false).getRate();
+//                String output = "from:" + fromCountry + "\nto:" + toCountry + "\nrate:" + rate + "\nstarting value:" + amount +"\nfinishing value:" + result;
+//                String toOutput = pastebinAPI.createPastin(output).getURI();
+//                this.mainWindowView.displayResult(rate, result);
+                Task<Result> task = this.getAPIRequestTask(amount_num,fromCurrency,toCurrency,this.mainWindowView,false);
+                Thread thread = new Thread(task);
+                thread.start();
             }
 
         }
     }
 
-    public Task<Result> getAPIRequestTask(double finalAmount, String finalFromCurrency, String finalToCurrency, MainWindowView mainWindowView){
+    public Task<Result> getAPIRequestTask(double finalAmount, String finalFromCurrency, String finalToCurrency, MainWindowView mainWindowView, boolean update){
         Task<Result> task = new Task<>() {
             @Override
             protected Result call() {
@@ -132,11 +133,16 @@ public class MainWindowPresenter {
                 Rate rate = null;
                 Convert result = null;
                 try {
-                    rate = currencyScoopAPI.getRate(finalFromCurrency, finalToCurrency, true);
-                    result = currencyScoopAPI.convert(finalFromCurrency, finalToCurrency, finalAmount);
+                    rate = currencyScoopAPI.getRate(finalFromCurrency, finalToCurrency, update);
+                    if (update == false && isOnline){
+                        result = new Convert(currencyScoopAPI.calculateResult(finalAmount, rate.getRate()),finalFromCurrency, finalToCurrency);
+                    }else{
+                        result = currencyScoopAPI.convert(finalFromCurrency, finalToCurrency, finalAmount);
+                    }
                 } catch (URISyntaxException | IOException | InterruptedException | IllegalArgumentException e) {
                     mainWindowView.displayError("invalid currency");
                 }
+
 
                 Result message = new Result(rate, result);
 
@@ -154,9 +160,13 @@ public class MainWindowPresenter {
             String to = currencyScoopAPI.getToCountry(rate.getTo());
 
             String output = "from:" + from + "\nto:" + to + "\nrate:" + rate + "\nstarting value:" + finalAmount +"\nfinishing value:" + result;
-            String toOutput = pastebinAPI.createPastin(output).getURI();
+
             mainWindowView.setProgressIndicator(false);
-            mainWindowView.displayResult(rate.getRate(), result.getResult(), toOutput);
+            Optional<ButtonType> generateReport = mainWindowView.displayResult(rate.getRate(), result.getResult());
+            if (generateReport.isPresent() && generateReport.get().getButtonData().equals(ButtonBar.ButtonData.YES)){
+                String toOutput = pastebinAPI.createPastin(output).getURI();
+                mainWindowView.displayPastebin(toOutput);
+            }
             mainWindowView.enableConvert();
 
         });

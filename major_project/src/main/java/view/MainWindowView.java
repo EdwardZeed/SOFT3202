@@ -3,11 +3,13 @@ package view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -119,37 +121,63 @@ public class MainWindowView {
 
     }
 
-    public void displayResult(double rate, double result, String toOutput) {
+    public Optional<ButtonType> displayResult(double rate, double result) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Result");
 
         alert.setHeaderText("Result");
-        alert.setContentText("Result: " + result + "\n" + "Rate: " + rate + "\n" + "output: " + toOutput +
-                "\n" + "click show detail to browse the output website");
+        alert.setContentText("Result: " + result + "\n" + "Rate: " + rate);
 
         //        make the output link clickable
-        Hyperlink link = new Hyperlink(toOutput);
-        link.setOnAction(event -> {
+//        Hyperlink link = new Hyperlink(toOutput);
+//        link.setOnAction(event -> {
+//
+//            try {
+//                Desktop.getDesktop().browse(new URI(toOutput));
+//            } catch (IOException | URISyntaxException e) {
+//                displayError(e.getMessage());
+//            }
+//
+//        });
+//        alert.getDialogPane().setExpandableContent(link);
+        ButtonType yes = new ButtonType("generate report", ButtonBar.ButtonData.YES);
+        ButtonType no = new ButtonType("close", ButtonBar.ButtonData.NO);
+        alert.getButtonTypes().setAll(yes, no);
+        return alert.showAndWait();
 
+    }
+
+    public void displayPastebin(String pastebin) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Hyperlink link = new Hyperlink(pastebin);
+        link.setOnAction(event -> {
             try {
-                Desktop.getDesktop().browse(new URI(toOutput));
+                Desktop.getDesktop().browse(new URI(pastebin));
             } catch (IOException | URISyntaxException e) {
                 displayError(e.getMessage());
             }
 
         });
-        alert.getDialogPane().setExpandableContent(link);
-        alert.showAndWait();
+        HBox hBox = new HBox();
+        Label label = new Label("paste to pastebin");
+        hBox.getChildren().add(label);
+        hBox.getChildren().add(link);
 
+        alert.getDialogPane().setContent(hBox);
+        alert.showAndWait();
     }
 
     public Optional<ButtonType> displayCacheHit(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Currency Converter");
         alert.setContentText("cache hit for this data – use cache, or request fresh data from the API?");
         ButtonType buttonTypeOne = new ButtonType("Use Cache", ButtonBar.ButtonData.YES);
         ButtonType buttonTypeTwo = new ButtonType("Request Fresh Data", ButtonBar.ButtonData.NO);
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+//        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+        alert.getDialogPane().getButtonTypes().clear();
+        alert.getDialogPane().getButtonTypes().addAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
         return alert.showAndWait();
     }
 
