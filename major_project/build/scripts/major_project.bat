@@ -67,7 +67,7 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\major_project.jar;%APP_HOME%\lib\javafx-media-17.0.2-mac.jar;%APP_HOME%\lib\javafx-fxml-17.0.2-mac.jar;%APP_HOME%\lib\javafx-controls-17.0.2-mac.jar;%APP_HOME%\lib\javafx-controls-17.0.2.jar;%APP_HOME%\lib\javafx-graphics-17.0.2-mac.jar;%APP_HOME%\lib\javafx-graphics-17.0.2.jar;%APP_HOME%\lib\javafx-base-17.0.2-mac.jar;%APP_HOME%\lib\javafx-base-17.0.2.jar;%APP_HOME%\lib\gson-2.9.0.jar;%APP_HOME%\lib\sqlite-jdbc-3.36.0.3.jar;%APP_HOME%\lib\controlsfx-11.1.1.jar;%APP_HOME%\lib\httpclient-4.5.2.jar;%APP_HOME%\lib\httpcore-4.4.4.jar;%APP_HOME%\lib\commons-logging-1.2.jar;%APP_HOME%\lib\commons-codec-1.9.jar
+set CLASSPATH=%APP_HOME%\lib\major_project.jar;%APP_HOME%\lib\javafx-fxml-17.0.2-mac.jar;%APP_HOME%\lib\javafx-controls-17.0.2-mac.jar;%APP_HOME%\lib\javafx-controls-17.0.2.jar;%APP_HOME%\lib\javafx-media-17.0.2-mac.jar;%APP_HOME%\lib\javafx-graphics-17.0.2-mac.jar;%APP_HOME%\lib\javafx-graphics-17.0.2.jar;%APP_HOME%\lib\javafx-base-17.0.2-mac.jar;%APP_HOME%\lib\javafx-base-17.0.2.jar;%APP_HOME%\lib\gson-2.9.0.jar;%APP_HOME%\lib\sqlite-jdbc-3.36.0.3.jar;%APP_HOME%\lib\controlsfx-11.1.1.jar;%APP_HOME%\lib\httpclient-4.5.2.jar;%APP_HOME%\lib\httpcore-4.4.4.jar;%APP_HOME%\lib\commons-logging-1.2.jar;%APP_HOME%\lib\commons-codec-1.9.jar
 
 
 @rem Execute major_project

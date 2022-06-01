@@ -25,6 +25,9 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Optional;
 
+/**
+ * This class defines all the functionalities of building the main window of the application.
+ */
 public class MainWindowView {
     @FXML
     private ListView<String> listView;
@@ -44,14 +47,30 @@ public class MainWindowView {
     private MediaPlayer mediaPlayer;
 
     private boolean isLight = true;
+    /**
+     * The map window pane pre-built from the start of the application.
+     */
     Pane map = StageManagement.panes.get("MapWindow");
     private MainWindowPresenter presenter;
-    File light = new File("src/main/java/view/light_mode.css");
-    File dark = new File("src/main/java/view/dark_mode.css");
+    /**
+     * The light mode css file.
+     */
+    File light = new File("src/main/resources/view/light_mode.css");
+    /**
+     * The dark mode css file.
+     */
+    File dark = new File("src/main/resources/view/dark_mode.css");
 
+    /**
+     * Instantiates a new Main window view.
+     */
     public MainWindowView() {
     }
 
+    /**
+     * Initialize.
+     * Initialize the main window, play theme song and set the progressindicator
+     */
     public void initialize() {
         File bgm = new File("src/main/resources/bgm.wav");
         File play_icon_file = new File("src/main/resources/play_icon.png");
@@ -70,22 +89,41 @@ public class MainWindowView {
         progressIndicator.setVisible(false);
     }
 
+    /**
+     * Gets presenter.
+     *
+     * @return the presenter
+     */
     public MainWindowPresenter getPresenter() {
         return presenter;
     }
 
 
+    /**
+     * Sets status.
+     *
+     * @param currencyOnline the mode of currencyscoop, true if online, otherwise offline
+     * @param pastebinOnline the mode of pastebin, true if online, otherwise offline
+     */
     public void setStatus(boolean currencyOnline, boolean pastebinOnline) {
 
         this.presenter.setStatus(currencyOnline, pastebinOnline);
     }
 
+    /**
+     * Event handler for clicking add currency button.
+     */
+    @FXML
     public void AddCurrency(){
-        System.out.println(this);
         this.presenter.showMapWindow();
-
     }
 
+    /**
+     * Add currency to listview.
+     *
+     * @param currencyCode the currency code to add
+     * @param countryName  the country name to add
+     */
     public void addCurrencyToListView(String currencyCode, String countryName) {
 
         listView.getItems().add(countryName + "\n" + currencyCode);
@@ -93,34 +131,50 @@ public class MainWindowView {
     }
 
 
+    /**
+     * Rebuild listview.
+     *
+     * @param countries the countries
+     */
     public void rebuildListView(HashMap<String, String> countries){
-        listView.getItems().clear();
-        from.getItems().clear();
-        to.getItems().clear();
+        String from = this.from.getValue();
+        String to = this.to.getValue();
+        this.listView.getItems().clear();
+        this.from.getItems().clear();
+        this.to.getItems().clear();
         System.out.println("from rebuild"+countries.values());
         countries.forEach((k,v) -> {
             addCurrencyToListView(v,k);
-            from.getItems().add(v);
-            to.getItems().add(v);
+            this.from.getItems().add(v);
+            this.to.getItems().add(v);
 
         });
-
+        this.from.setValue(from);
+        this.to.setValue(to);
     }
 
+    /**
+     * Event handler for clicking convert button.
+     *
+     */
+    @FXML
     public void handleConvert() {
 
-        try {
-            String fromCurrency = from.getSelectionModel().getSelectedItem();
-            String toCurrency = to.getSelectionModel().getSelectedItem();
-            String amount = this.amount.getText();
-            this.presenter.getResult(fromCurrency, toCurrency, amount);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            displayError("no result");
-        }
+        String fromCurrency = from.getSelectionModel().getSelectedItem();
+        String toCurrency = to.getSelectionModel().getSelectedItem();
+        String amount = this.amount.getText();
+        this.presenter.getResult(fromCurrency, toCurrency, amount);
 
 
     }
 
+    /**
+     * Display the conversion result.
+     *
+     * @param rate   the rate
+     * @param result the result
+     * @return the result of user choice whether generate pastebin report or not
+     */
     public Optional<ButtonType> displayResult(double rate, double result) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Result");
@@ -128,18 +182,7 @@ public class MainWindowView {
         alert.setHeaderText("Result");
         alert.setContentText("Result: " + result + "\n" + "Rate: " + rate);
 
-        //        make the output link clickable
-//        Hyperlink link = new Hyperlink(toOutput);
-//        link.setOnAction(event -> {
-//
-//            try {
-//                Desktop.getDesktop().browse(new URI(toOutput));
-//            } catch (IOException | URISyntaxException e) {
-//                displayError(e.getMessage());
-//            }
-//
-//        });
-//        alert.getDialogPane().setExpandableContent(link);
+
         ButtonType yes = new ButtonType("generate report", ButtonBar.ButtonData.YES);
         ButtonType no = new ButtonType("close", ButtonBar.ButtonData.NO);
         alert.getButtonTypes().setAll(yes, no);
@@ -147,6 +190,11 @@ public class MainWindowView {
 
     }
 
+    /**
+     * Display generated pastebin URL.
+     *
+     * @param pastebin the pastebin URL
+     */
     public void displayPastebin(String pastebin) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         Hyperlink link = new Hyperlink(pastebin);
@@ -167,6 +215,11 @@ public class MainWindowView {
         alert.showAndWait();
     }
 
+    /**
+     * Display cache hit alert window.
+     *
+     * @return the result of user choice whether use cache or request fresh data
+     */
     public Optional<ButtonType> displayCacheHit(){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Currency Converter");
@@ -182,10 +235,18 @@ public class MainWindowView {
     }
 
 
+    /**
+     * Event handler for user choosing clear listview.
+     */
+    @FXML
     public void handleClear(){
         this.presenter.clear();
     }
 
+    /**
+     * Event handler for removing a currency in listview.
+     */
+    @FXML
     public void handleRemove() {
         try {
             String selected = listView.getSelectionModel().getSelectedItem();
@@ -197,18 +258,36 @@ public class MainWindowView {
         }
     }
 
+    /**
+     * Event handler for clearing cache.
+     */
+    @FXML
     public void handleClearCache(){
         this.presenter.clearCache();
     }
 
+    /**
+     * Event handler for pausing and playing theme song.
+     */
+    @FXML
     public void handleBGM(){
         this.presenter.controlBGM(mediaPlayer.getStatus());
     }
 
+    /**
+     * Event handler for changing light/dark mode.
+     */
+    @FXML
     public void handleMode(){
         this.presenter.controlMode(isLight);
     }
 
+    /**
+     * Display error message.
+     *
+     * @param error the error
+     */
+    @FXML
     public void displayError(String error){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -217,26 +296,47 @@ public class MainWindowView {
         alert.showAndWait();
     }
 
+    /**
+     * Set progress indicator visible/invisible.
+     *
+     * @param isLoading make progress indicator visible if true, otherwise invisible
+     */
     public void setProgressIndicator(boolean isLoading){
         System.out.println(Thread.currentThread().getName());
         progressIndicator.setVisible(isLoading);
     }
 
+    /**
+     * Disable convert button.
+     */
     public void disableConvert(){
         convertbtn.setDisable(true);
     }
 
+    /**
+     * Enable convert button.
+     */
     public void enableConvert(){
         convertbtn.setDisable(false);
     }
 
+    /**
+     * Pause theme song.
+     */
     public void pause(){
         mediaPlayer.pause();
     }
+
+    /**
+     * Play theme song.
+     */
     public void play(){
         mediaPlayer.play();
     }
 
+    /**
+     * Sets dark mode for main window and map window.
+     */
     public void setDarkMode() {
         bg.getStylesheets().remove(light.toURI().toString());
         bg.getStylesheets().add(dark.toURI().toString());
@@ -244,12 +344,16 @@ public class MainWindowView {
         map.getStylesheets().add(dark.toURI().toString());
     }
 
+    /**
+     * Sets light mode for main window and map window.
+     */
     public void setLightMode() {
         bg.getStylesheets().remove(dark.toURI().toString());
         bg.getStylesheets().add(light.toURI().toString());
         map.getStylesheets().remove(dark.toURI().toString());
         map.getStylesheets().add(light.toURI().toString());
     }
+
 
     public void setMode(boolean isLight) {
         this.isLight = isLight;

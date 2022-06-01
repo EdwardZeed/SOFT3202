@@ -3,14 +3,23 @@ package model;
 import java.io.File;
 import java.sql.*;
 
+/**
+ * The database object.
+ */
 public class Database {
     private static String dbName = "cache.db";
     private static String dbURL = "jdbc:sqlite:" + dbName;
 
+    /**
+     * Instantiates a new Database.
+     */
     public Database(){
         setUp();
     }
 
+    /**
+     * Create db.
+     */
     public static void createDB(){
         File dbFile = new File(dbName);
         if (dbFile.exists()){
@@ -26,6 +35,9 @@ public class Database {
         }
     }
 
+    /**
+     * create table for cache storage.
+     */
     public static void setUp(){
         createDB();
 
@@ -47,6 +59,9 @@ public class Database {
         }
     }
 
+    /**
+     * Clear cache table.
+     */
     public static void clear(){
         String dropTable = "DROP TABLE IF EXISTS cache;";
         try(Connection conn = DriverManager.getConnection(dbURL);
@@ -57,6 +72,13 @@ public class Database {
         }
     }
 
+    /**
+     * Gets the latest rate between the two given currency codes.
+     *
+     * @param startCurrency the start currency
+     * @param endCurrency   the end currency
+     * @return the latest rate stored in the database
+     */
     public static double getRate(String startCurrency, String endCurrency) {
         setUp();
 
@@ -84,6 +106,14 @@ public class Database {
 
     }
 
+    /**
+     * Add conversation record to cache table.
+     *
+     * @param startCurrency the start currency
+     * @param endCurrency   the end currency
+     * @param rate          the rate
+     * @return true if the conversation was added to the database
+     */
     public boolean addConversation(String startCurrency, String endCurrency, double rate) {
         setUp();
 

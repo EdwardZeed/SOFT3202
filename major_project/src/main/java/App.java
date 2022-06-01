@@ -1,19 +1,27 @@
-import presenter.StageManagement;
-import javafx.scene.layout.Pane;
-import view.MainWindowView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import presenter.StageManagement;
+import view.MainWindowView;
 
+import java.io.File;
+
+/**
+ * The main application.
+ */
 public class App extends Application {
     private static String state1;
     private static String state2;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
-        FXMLLoader MapLoader = new FXMLLoader(getClass().getResource("/view/MapWindow.fxml"));
+        File mainFXML = new File("src/main/resources/view/MainWindow.fxml");
+        File mapFXML = new File("src/main/resources/view/MapWindow.fxml");
+
+        FXMLLoader loader = new FXMLLoader(mainFXML.toURI().toURL());
+        FXMLLoader MapLoader = new FXMLLoader(mapFXML.toURI().toURL());
         Pane mapRoot = MapLoader.load();
 
         StageManagement.loaders.put("MapWindow", MapLoader);
@@ -43,6 +51,12 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    /**
+     * The entry point of application.
+     * Records what mode user choose to use.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         state1 = args[0];
         state2 = args[1];

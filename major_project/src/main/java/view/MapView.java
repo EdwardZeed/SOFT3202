@@ -11,15 +11,25 @@ import presenter.StageManagement;
 import java.util.Currency;
 import java.util.Locale;
 
+/**
+ * This class defines all the functionalities of building the map window.
+ */
 public class MapView {
     @FXML
     private WorldMapView map;
 
+    /**
+     * Initialize.
+     */
     public void initialize(){
         StageManagement.views.put("MapWindow", this);
     }
 
 
+    /**
+     * Event handler for adding currencies.
+     * pass the country user selected to presenter and tell presenter the event happened.
+     */
     public void ShowCountry() {
         try {
             System.out.println(map.getSelectedCountries());
@@ -42,6 +52,18 @@ public class MapView {
 
     }
 
+    @FXML
+    public void handleConfirm(){
+        MainWindowView view = (MainWindowView) StageManagement.views.get("MainWindow");
+        MainWindowPresenter presenter = view.getPresenter();
+        presenter.showCurrency();
+        Stage stage = (Stage) map.getScene().getWindow();
+        stage.close();
+    }
+
+    /**
+     * Build map window.
+     */
     public void buildMap(){
         Pane root = StageManagement.panes.get("MapWindow");
         Scene scene = new Scene(root);
@@ -51,6 +73,9 @@ public class MapView {
         stage.show();
     }
 
+    /**
+     * Rebuild map.
+     */
     public void rebuildMap(){
         Stage stage = StageManagement.stages.get("MapStage");
         stage.show();

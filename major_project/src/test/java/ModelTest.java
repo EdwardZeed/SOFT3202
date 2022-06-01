@@ -1,12 +1,13 @@
 import model.*;
-import model.request.*;
+import model.POJOs.Convert;
+import model.POJOs.PastebinResult;
+import model.POJOs.Rate;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -14,29 +15,26 @@ import static org.mockito.Mockito.*;
 public class ModelTest {
     @Test
     public void testConvertOnline() {
-        CurrencyRequestOnline mockRequestOnline = mock(CurrencyRequestOnline.class);
+        CurrencyScoopAPIOnline mockAPIOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockAPIOutputOnline = mock(PastebinAPIOnline.class);
 
         Convert convert = new Convert(0.94720926, "USD", "EUR");
         try {
-            when(mockRequestOnline.getConvert(anyString(), anyString(), anyDouble())).thenReturn(convert);
+            when(mockAPIOnline.convert(anyString(), anyString(), anyDouble())).thenReturn(convert);
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        CurrencyScoopAPI api = new CurrencyScoopAPI(true);
-        api.setRequest(mockRequestOnline);
+        Model model = new Model(mockAPIOnline, mockAPIOutputOnline);
+        model.setInputAPI(mockAPIOnline);
 
         Convert result;
-        try {
-            result = api.convert("USD", "EUR", 1);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        result = model.getConvert("USD", "EUR", 1);
 
         assertEquals(result.getResult(), 0.94720926);
         assertEquals(result.getFrom(), "USD");
         assertEquals(result.getTo(), "EUR");
         try {
-            verify(mockRequestOnline, times(1)).getConvert(anyString(), anyString(), anyDouble());
+            verify(mockAPIOnline, times(1)).convert(anyString(), anyString(), anyDouble());
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -44,67 +42,79 @@ public class ModelTest {
 
     @Test
     public void testConvertOnlineInvalid()  {
-        CurrencyScoopAPI api = new CurrencyScoopAPI(true);
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        CurrencyScoopAPIOffline mockInputOffline = mock(CurrencyScoopAPIOffline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        PastebinAPIOffline mockOutputOffline = mock(PastebinAPIOffline.class);
+        Model model1 = new Model(mockInputOnline, mockOutputOnline);
 
-        assertThrows(IllegalArgumentException.class, () -> api.convert("US", "EUR", 1));
-        assertThrows(IllegalArgumentException.class, () -> api.convert("USD", "E", 1));
-        assertThrows(IllegalArgumentException.class, () -> api.convert("US", "EU", 1));
+        assertThrows(IllegalArgumentException.class, () -> model1.getConvert("US", "EUR", 1));
+        assertThrows(IllegalArgumentException.class, () -> model1.getConvert("USD", "E", 1));
+        assertThrows(IllegalArgumentException.class, () -> model1.getConvert("US", "EU", 1));
+
+        Model model2 = new Model(mockInputOffline, mockOutputOffline);
+        assertThrows(IllegalArgumentException.class, () -> model2.getConvert("US", "EUR", 1));
+        assertThrows(IllegalArgumentException.class, () -> model2.getConvert("USD", "E", 1));
+        assertThrows(IllegalArgumentException.class, () -> model2.getConvert("US", "EU", 1));
+
+        Model model3 = new Model(mockInputOnline, mockOutputOffline);
+        assertThrows(IllegalArgumentException.class, () -> model3.getConvert("US", "EUR", 1));
+        assertThrows(IllegalArgumentException.class, () -> model3.getConvert("USD", "E", 1));
+        assertThrows(IllegalArgumentException.class, () -> model3.getConvert("US", "EU", 1));
+
+        Model model4 = new Model(mockInputOffline, mockOutputOnline);
+        assertThrows(IllegalArgumentException.class, () -> model4.getConvert("US", "EUR", 1));
+        assertThrows(IllegalArgumentException.class, () -> model4.getConvert("USD", "E", 1));
+        assertThrows(IllegalArgumentException.class, () -> model4.getConvert("US", "EU", 1));
 
     }
 
 
     @Test
     public void testConvertOffline(){
-        CurrencyRequestOffline mockRequestOffline = mock(CurrencyRequestOffline.class);
+        CurrencyScoopAPIOffline mockInputOffline = mock(CurrencyScoopAPIOffline.class);
+        PastebinAPIOffline mockOutputOffline = mock(PastebinAPIOffline.class);
 
         Convert convert = new Convert(0.94720926, "USD", "EUR");
-        when(mockRequestOffline.getConvert(anyString(), anyString(), anyDouble())).thenReturn(convert);
+        when(mockInputOffline.convert(anyString(), anyString(), anyDouble())).thenReturn(convert);
 
-        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
-        api.setRequest(mockRequestOffline);
+        Model model = new Model(mockInputOffline, mockOutputOffline);
+        model.setInputAPI(mockInputOffline);
 
         Convert result;
-        try {
-            result = api.convert("USD", "EUR", 1);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        result = model.getConvert("USD", "EUR", 1);
 
         assertEquals(result.getResult(), 0.94720926);
         assertEquals(result.getFrom(), "USD");
         assertEquals(result.getTo(), "EUR");
-        verify(mockRequestOffline, times(1)).getConvert(anyString(), anyString(), anyDouble());
+        verify(mockInputOffline, times(1)).convert(anyString(), anyString(), anyDouble());
 
     }
 
     @Test
     public void testRateOnline() {
-        CurrencyRequestOnline mockRequestOnline = mock(CurrencyRequestOnline.class);
-        Database mockDatabase = mock(Database.class);
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
 
         Rate rate = new Rate("USD","EUR", 0.9463667);
         try {
-            when(mockRequestOnline.getRate(anyString(), anyString())).thenReturn(rate);
+            when(mockInputOnline.getRate(anyString(), anyString())).thenReturn(rate);
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        when(mockDatabase.addConversation(anyString(), anyString(), anyDouble())).thenReturn(false);
-        CurrencyScoopAPI api = new CurrencyScoopAPI(true);
-        api.setRequest(mockRequestOnline);
-        api.setDb(mockDatabase);
+
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+        model.setInputAPI(mockInputOnline);
+
 
         Rate result;
-        try {
-            result = api.getRate("USD", "EUR", true);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        result = model.getRate("USD", "EUR", false);
 
         assertEquals(result.getRate(), 0.9463667);
         assertEquals(result.getFrom(), "USD");
         assertEquals(result.getTo(), "EUR");
         try {
-            verify(mockRequestOnline, times(1)).getRate(anyString(), anyString());
+            verify(mockInputOnline, times(1)).getRate(anyString(), anyString());
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -112,129 +122,138 @@ public class ModelTest {
 
     @Test
     public void testGetRateInvalid(){
-        CurrencyScoopAPI api = new CurrencyScoopAPI(true);
-        Database mockDatabase = mock(Database.class);
-        api.setDb(mockDatabase);
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        CurrencyScoopAPIOffline mockInputOffline = mock(CurrencyScoopAPIOffline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        PastebinAPIOffline mockOutputOffline = mock(PastebinAPIOffline.class);
 
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EU", true));
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EU", false));
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("USD", "EU", true));
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("USD", "EU", false));
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EUR", false));
-        assertThrows(IllegalArgumentException.class, () -> api.getRate("US", "EUR", true));
+        Model model1 = new Model(mockInputOnline, mockOutputOnline);
+        assertThrows(IllegalArgumentException.class, () -> model1.getRate("US", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model1.getRate("USD", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model1.getRate("US", "EUR", false));
+
+        Model model2 = new Model(mockInputOffline, mockOutputOffline);
+        assertThrows(IllegalArgumentException.class, () -> model2.getRate("US", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model2.getRate("USD", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model2.getRate("US", "EUR", false));
+
+        Model model3 = new Model(mockInputOnline, mockOutputOffline);
+        assertThrows(IllegalArgumentException.class, () -> model3.getRate("US", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model3.getRate("USD", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model3.getRate("US", "EUR", false));
+
+        Model model4 = new Model(mockInputOffline, mockOutputOnline);
+        assertThrows(IllegalArgumentException.class, () -> model4.getRate("US", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model4.getRate("USD", "EU", false));
+        assertThrows(IllegalArgumentException.class, () -> model4.getRate("US", "EUR", false));
 
     }
 
     @Test
     public void testRateOffline() {
-        CurrencyRequestOffline mockRequestOffline = mock(CurrencyRequestOffline.class);
-        Database mockDatabase = mock(Database.class);
+        CurrencyScoopAPIOffline inputOffline = new CurrencyScoopAPIOffline();
+        PastebinAPIOffline mockOutputOffline = mock(PastebinAPIOffline.class);
 
-        Rate rate = new Rate("USD","EUR", 1);
-        when(mockRequestOffline.getRate(anyString(), anyString())).thenReturn(rate);
-        when(mockDatabase.addConversation(anyString(), anyString(), anyDouble())).thenReturn(false);
-        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
-        api.setRequest(mockRequestOffline);
-        api.setDb(mockDatabase);
+        Model model = new Model(inputOffline, mockOutputOffline);
 
         Rate result1;
-        Rate result2;
-        try {
-            result1 = api.getRate("USD", "EUR", true);
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        result1 = model.getRate("USD", "EUR", false);
 
-        assertEquals(result1.getRate(), 1);
+        assertEquals(result1.getRate(), 0.94618129);
         assertEquals(result1.getFrom(), "USD");
         assertEquals(result1.getTo(), "EUR");
-        verify(mockRequestOffline, times(1)).getRate(anyString(), anyString());
 
-//        try {
-//            result2 = api.getRate("USD", "EUR", false);
-//        } catch (URISyntaxException | IOException | InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        assertEquals(result2.getRate(), 1);
-//        assertEquals(result2.getFrom(), "USD");
-//        assertEquals(result2.getTo(), "EUR");
-//        verify(mockRequestOffline, times(2)).getRate(anyString(), anyString());
     }
 
     @Test
     public void testPastebinOnline(){
-        PastebinRequestOnline mockRequestOnline = mock(PastebinRequestOnline.class);
-        PastebinResult pastebinResult = new PastebinResult("https://pastebin.com/NR2Gp4JM");
-        when(mockRequestOnline.getPastebinResponse(anyString())).thenReturn(pastebinResult);
-        PastebinAPI api = new PastebinAPI(true);
-        api.setRequest(mockRequestOnline);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
 
-        assertEquals(api.createPastin("this is from test suits").getURI(), "https://pastebin.com/NR2Gp4JM");
-        verify(mockRequestOnline, times(1)).getPastebinResponse(anyString());
+        PastebinResult pastebinResult = new PastebinResult("https://pastebin.com/NR2Gp4JM");
+        when(mockOutputOnline.createPastin(anyString())).thenReturn(pastebinResult);
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+
+        assertEquals(model.postToPastebin("this is from test suits").getURI(), "https://pastebin.com/NR2Gp4JM");
+        verify(mockOutputOnline, times(1)).createPastin(anyString());
     }
 
     @Test
     public void testPastebinOffline(){
-        PastebinRequestOffline mockRequestOffline = mock(PastebinRequestOffline.class);
-        PastebinResult result = new PastebinResult("https://pastebin.com/NR2Gp4JM");
+        PastebinAPIOffline outputOffline = new PastebinAPIOffline();
+        CurrencyScoopAPIOffline mockInputOffline = mock(CurrencyScoopAPIOffline.class);
+        Model model = new Model(mockInputOffline, outputOffline);
 
-        when(mockRequestOffline.getPastebinResponse(anyString())).thenReturn(result);
-        PastebinAPI api = new PastebinAPI(false);
-        api.setRequest(mockRequestOffline);
-
-        assertEquals(api.createPastin("this is from test suits").getURI(), "https://pastebin.com/NR2Gp4JM");
-        verify(mockRequestOffline, times(1)).getPastebinResponse(anyString());
+        assertEquals(model.postToPastebin("this is from test suits").getURI(), "https://pastebin.com/0z5GEYtM");
     }
 
     @Test
     public void testAddCurrency(){
-        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
-        api.addCountry("United States", "USD");
-        api.addCountry("Australia", "AUD");
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+        model.addCountry("United States", "USD");
+        model.addCountry("Australia", "AUD");
 
-        assertEquals(2, api.getCountries().size());
-        assertEquals("USD", api.getCountries().get("United States"));
-        assertEquals("AUD", api.getCountries().get("Australia"));
+        assertEquals(2, model.getCountries().size());
+        assertEquals("USD", model.getCountries().get("United States"));
+        assertEquals("AUD", model.getCountries().get("Australia"));
 
-        api.addCountry("United States", "USD");
-        assertEquals(2, api.getCountries().size());
-        assertEquals("USD", api.getCountries().get("United States"));
-        assertEquals("AUD", api.getCountries().get("Australia"));
+        model.addCountry("United States", "USD");
+        assertEquals(2, model.getCountries().size());
+        assertEquals("USD", model.getCountries().get("United States"));
+        assertEquals("AUD", model.getCountries().get("Australia"));
 
     }
 
     @Test
     public void testRemoveCurrency(){
-        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
-        api.addCountry("United States", "USD");
-        api.addCountry("Australia", "AUD");
-        assertEquals(2, api.getCountries().size());
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+        model.addCountry("United States", "USD");
+        model.addCountry("Australia", "AUD");
+        assertEquals(2, model.getCountries().size());
 
-        api.remove("Australia");
+        model.remove("Australia");
 
-        assertEquals(1, api.getCountries().size());
-        assertEquals("USD", api.getCountries().get("United States"));
-        assertEquals(null, api.getCountries().get("Australia"));
+        assertEquals(1, model.getCountries().size());
+        assertEquals("USD", model.getCountries().get("United States"));
+        assertNull(model.getCountries().get("Australia"));
     }
 
     @Test
-    public void testGetCountries(){
-        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
-        api.addCountry("United States", "USD");
-        api.addCountry("Australia", "AUD");
-        assertEquals("United States", api.getFromCountry("USD"));
-        assertEquals("Australia", api.getToCountry("AUD"));
+    public void testGetCountryName(){
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+        model.addCountry("United States", "USD");
+        model.addCountry("Australia", "AUD");
+        assertEquals("United States", model.getCountryName("USD"));
+        assertEquals("Australia", model.getCountryName("AUD"));
     }
 
     @Test
     public void testClearCountries(){
-        CurrencyScoopAPI api = new CurrencyScoopAPI(false);
-        api.addCountry("United States", "USD");
-        api.addCountry("Australia", "AUD");
-        assertEquals(2, api.getCountries().size());
-        api.clear();
-        assertEquals(0, api.getCountries().size());
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+        model.addCountry("United States", "USD");
+        model.addCountry("Australia", "AUD");
+        assertEquals(2, model.getCountries().size());
+        model.clear();
+        assertEquals(0, model.getCountries().size());
+    }
+
+    @Test
+    public void testCalculateResult(){
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+        Rate rate = new Rate("USD", "AUD", 1.5);
+        Convert result = model.calculateResult(1, rate);
+        assertEquals(1.5, result.getResult(), 0.001);
+
     }
 
 }

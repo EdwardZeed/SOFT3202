@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ModelTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2022-05-26T16:36:04" hostname="Edwards-MacBook-Pro.local" time="0.659">
+<testsuite name="ModelTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2022-05-31T11:07:56" hostname="Edwards-MacBook-Pro.local" time="0.96">
   <properties/>
-  <testcase name="testGetCountries()" classname="ModelTest" time="0.009"/>
-  <testcase name="testClearCountries()" classname="ModelTest" time="0.0"/>
-  <testcase name="testAddCurrency()" classname="ModelTest" time="0.0"/>
-  <testcase name="testPastebinOnline()" classname="ModelTest" time="0.479"/>
-  <testcase name="testConvertOnlineInvalid()" classname="ModelTest" time="0.117"/>
-  <testcase name="testConvertOnline()" classname="ModelTest" time="0.013"/>
-  <testcase name="testRateOffline()" classname="ModelTest" time="0.023"/>
+  <testcase name="testCalculateResult()" classname="ModelTest" time="0.845"/>
+  <testcase name="testClearCountries()" classname="ModelTest" time="0.001"/>
+  <testcase name="testAddCurrency()" classname="ModelTest" time="0.001"/>
+  <testcase name="testPastebinOnline()" classname="ModelTest" time="0.025"/>
+  <testcase name="testConvertOnlineInvalid()" classname="ModelTest" time="0.026"/>
+  <testcase name="testConvertOnline()" classname="ModelTest" time="0.003"/>
+  <testcase name="testRateOffline()" classname="ModelTest" time="0.044"/>
   <testcase name="testConvertOffline()" classname="ModelTest" time="0.002"/>
-  <testcase name="testPastebinOffline()" classname="ModelTest" time="0.007"/>
-  <testcase name="testRateOnline()" classname="ModelTest" time="0.003"/>
-  <testcase name="testGetRateInvalid()" classname="ModelTest" time="0.002"/>
-  <testcase name="testRemoveCurrency()" classname="ModelTest" time="0.0"/>
+  <testcase name="testGetCountryName()" classname="ModelTest" time="0.0"/>
+  <testcase name="testPastebinOffline()" classname="ModelTest" time="0.0"/>
+  <testcase name="testRateOnline()" classname="ModelTest" time="0.001"/>
+  <testcase name="testGetRateInvalid()" classname="ModelTest" time="0.004"/>
+  <testcase name="testRemoveCurrency()" classname="ModelTest" time="0.002"/>
   <system-out><![CDATA[Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+{"EUR":0.94618129}
+Database already exists
+Database already exists
+Database already exists
+Database already exists
 Database already exists
 Database already exists
 Database already exists

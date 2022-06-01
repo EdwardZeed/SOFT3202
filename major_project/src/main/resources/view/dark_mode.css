@@ -1,0 +1,38 @@
+.bg_colour {
+  -fx-background-color: #2f2a2a;
+}
+.text_colour {
+  -fx-text-fill: white;
+  -fx-background-color: #61625d;
+}
+.image_colour {
+  -fx-fill: rgb(149, 161, 153);
+  -fx-background-color: rgb(149, 161, 153);
+}
+.button_rounder{
+  -fx-background-radius: 100;
+}
+.button{
+  -fx-background-radius: 100;
+}
+.label{
+  -fx-background-color: #2f2a2a;
+}
+.combo-box-base {
+  -fx-background-color: rgb(149, 161, 153);
+}
+.combo-box-base .list-view{
+  -fx-background-color: black;
+}
+.list-view {
+  -fx-background-color: rgb(149, 161, 153);
+}
+.list-view .cell {
+  -fx-background-color: rgb(149, 161, 153);
+}
+.list-view .scroll-bar {
+  -fx-background-color: rgb(149, 161, 153);
+}
+.map_colour {
+  -fx-background-color: black;
+}
