@@ -184,11 +184,20 @@ public class Model {
     }
 
     /**
-     * Set input api.
+     * Set input api. Used for test only
      *
      * @param currencyScoop the CurrencyScoop object
      */
     public void setInputAPI(CurrencyScoop currencyScoop){
         this.currencyScoop = currencyScoop;
+    }
+
+    /**
+     * Set database object. Used for test only.
+     *
+     * @param db the Database object
+     */
+    public void setDatabase(Database db){
+        this.db = db;
     }
 }

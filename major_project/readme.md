@@ -9,6 +9,7 @@ variable name of Pastebin is PASTEBIN_API_KEY
 variable name of input API(CurrencyScoop) is INPUT_API_KEY
 
 all the fxml and css files are under resources/view folder
+all the javadoc files are under javadoc/
 # level of features I'm trying to implement
 I'm trying to implement distinction level
 # milestone 1 resubmission

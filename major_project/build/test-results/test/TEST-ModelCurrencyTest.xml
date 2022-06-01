@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ModelCurrencyTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-06-01T13:44:10" hostname="Edwards-MacBook-Pro.local" time="0.004">
+  <properties/>
+  <testcase name="testCalculateResult()" classname="ModelCurrencyTest" time="0.001"/>
+  <testcase name="testClearCountries()" classname="ModelCurrencyTest" time="0.0"/>
+  <testcase name="testAddCurrency()" classname="ModelCurrencyTest" time="0.0"/>
+  <testcase name="testGetCountryName()" classname="ModelCurrencyTest" time="0.0"/>
+  <testcase name="testRemoveCurrency()" classname="ModelCurrencyTest" time="0.001"/>
+  <system-out><![CDATA[Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

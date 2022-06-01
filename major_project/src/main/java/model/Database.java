@@ -79,7 +79,7 @@ public class Database {
      * @param endCurrency   the end currency
      * @return the latest rate stored in the database
      */
-    public static double getRate(String startCurrency, String endCurrency) {
+    public double getRate(String startCurrency, String endCurrency) {
         setUp();
 
         String query = """

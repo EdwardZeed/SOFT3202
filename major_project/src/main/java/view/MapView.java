@@ -52,6 +52,9 @@ public class MapView {
 
     }
 
+    /**
+     * Event handler for confirm button. when user click confirm button, all the selected currencies will be added to the main window.
+     */
     @FXML
     public void handleConfirm(){
         MainWindowView view = (MainWindowView) StageManagement.views.get("MainWindow");

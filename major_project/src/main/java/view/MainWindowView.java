@@ -132,7 +132,7 @@ public class MainWindowView {
 
 
     /**
-     * Rebuild listview.
+     * Rebuild listview. Show all the currencies in the given HashMap.
      *
      * @param countries the countries
      */
@@ -154,7 +154,7 @@ public class MainWindowView {
     }
 
     /**
-     * Event handler for clicking convert button.
+     * Event handler for clicking convert button. when user click convert button, application will start to convert currencies between two given currency.
      *
      */
     @FXML
@@ -191,7 +191,7 @@ public class MainWindowView {
     }
 
     /**
-     * Display generated pastebin URL.
+     * Display the given pastebin URL.
      *
      * @param pastebin the pastebin URL
      */
@@ -216,7 +216,7 @@ public class MainWindowView {
     }
 
     /**
-     * Display cache hit alert window.
+     * Display cache hit alert window. This alter window will wait for user's response.
      *
      * @return the result of user choice whether use cache or request fresh data
      */
@@ -236,7 +236,7 @@ public class MainWindowView {
 
 
     /**
-     * Event handler for user choosing clear listview.
+     * Event handler for user choosing clear listview. when user choose clear listview, all the elements showed in the listview will be cleared.
      */
     @FXML
     public void handleClear(){
@@ -244,7 +244,7 @@ public class MainWindowView {
     }
 
     /**
-     * Event handler for removing a currency in listview.
+     * Event handler for removing a currency in listview. when user choose remove a currency, the currency will be removed from the listview.
      */
     @FXML
     public void handleRemove() {
@@ -259,7 +259,7 @@ public class MainWindowView {
     }
 
     /**
-     * Event handler for clearing cache.
+     * Event handler for clearing cache. This will clear all the records in the cache database.
      */
     @FXML
     public void handleClearCache(){
@@ -355,6 +355,11 @@ public class MainWindowView {
     }
 
 
+    /**
+     * Sets mode to light or dark.
+     *
+     * @param isLight the is light
+     */
     public void setMode(boolean isLight) {
         this.isLight = isLight;
     }

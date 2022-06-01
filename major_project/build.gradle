@@ -51,7 +51,4 @@ test {
         showStandardStreams = true
     }
 
-    filter{
-        includeTestsMatching("ModelTest")
-    }
 }

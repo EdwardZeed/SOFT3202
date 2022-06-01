@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ModelAPITest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-06-01T13:44:09" hostname="Edwards-MacBook-Pro.local" time="0.854">
+  <properties/>
+  <testcase name="testPastebinOnline()" classname="ModelAPITest" time="0.777"/>
+  <testcase name="testConvertOnlineInvalid()" classname="ModelAPITest" time="0.033"/>
+  <testcase name="testConvertOnline()" classname="ModelAPITest" time="0.004"/>
+  <testcase name="testRateOffline()" classname="ModelAPITest" time="0.017"/>
+  <testcase name="testConvertOffline()" classname="ModelAPITest" time="0.003"/>
+  <testcase name="testPastebinOffline()" classname="ModelAPITest" time="0.001"/>
+  <testcase name="testRateOnline()" classname="ModelAPITest" time="0.012"/>
+  <testcase name="testGetRateInvalid()" classname="ModelAPITest" time="0.003"/>
+  <system-out><![CDATA[Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+{"EUR":0.94618129}
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+Database already exists
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
