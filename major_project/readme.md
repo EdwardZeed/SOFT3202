@@ -1,5 +1,5 @@
 # files 
-as Josh recommended, all the fxml and css files are under resources/view folder
+as Josh recommended, all the fxml and css files are under resources/view folder,
 all the javadoc files are under javadoc/
 
 click index.html to see the javadoc. if you want to see the javadoc for test file, search them in the search box.
