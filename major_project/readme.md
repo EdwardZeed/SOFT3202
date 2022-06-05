@@ -26,5 +26,5 @@ Distinction: implemented concurrency and spinning progress indicator
 # n-tier architecture
 implement mode-view-presenter architecture
 # milestone 2 resubmission
-SHA: fcce5e33253a28c5e892c59577c792a57e1e1ab7
-URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/fcce5e33253a28c5e892c59577c792a57e1e1ab7
+SHA: 793884df5135c45191dda5fa6660bb6d9aca098b
+URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/793884df5135c45191dda5fa6660bb6d9aca098b
