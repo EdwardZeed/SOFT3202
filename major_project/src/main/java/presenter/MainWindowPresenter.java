@@ -183,7 +183,7 @@ public class MainWindowPresenter {
                 } catch (IllegalArgumentException e) {
                     mainWindowView.displayError("invalid currency");
                 }
-
+                mainWindowView.setProgressIndicator(false);
                 Result message = new Result(rate, result);
 
                 this.updateValue(message);
@@ -203,11 +203,12 @@ public class MainWindowPresenter {
 
             Optional<ButtonType> generateReport = mainWindowView.displayResult(rate.getRate(), result.getResult());
             if (generateReport.isPresent() && generateReport.get().getButtonData().equals(ButtonBar.ButtonData.YES)){
+                mainWindowView.setProgressIndicator(true);
                 String toOutput = model.postToPastebin(output).getURI();
                 mainWindowView.setProgressIndicator(false);
                 mainWindowView.displayPastebin(toOutput);
             }
-
+//            mainWindowView.setProgressIndicator(false);
             mainWindowView.enableConvert();
 
         });
