@@ -1,3 +1,8 @@
+# files 
+as Josh recommended, all the fxml and css files are under resources/view folder
+all the javadoc files are under javadoc/
+
+click index.html to see the javadoc. if you want to see the javadoc for test file, search them in the search box.
 # citation
 the idea of StageManagement is from https://blog.birost.com/a?ID=00550-7ba27155-686d-4aef-8504-3e5a73dc6ad5
 # commit of submission
@@ -8,8 +13,6 @@ Pastebin only has 10 attempts within a 24 hours period.
 variable name of Pastebin is PASTEBIN_API_KEY
 variable name of input API(CurrencyScoop) is INPUT_API_KEY
 
-all the fxml and css files are under resources/view folder
-all the javadoc files are under javadoc/
 # level of features I'm trying to implement
 I'm trying to implement distinction level
 # milestone 1 resubmission
