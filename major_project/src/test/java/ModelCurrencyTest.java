@@ -115,9 +115,9 @@ public class ModelCurrencyTest {
         assertFalse(check2);
 
         boolean check3 = model.setThreshold(0.1);
-        assertTrue(check3);
+        assertFalse(check3);
 
         boolean check4 = model.setThreshold(1);
-        assertTrue(check4);
+        assertFalse(check4);
     }
 }

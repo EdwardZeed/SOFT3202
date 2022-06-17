@@ -209,7 +209,7 @@ public class Model {
      * @return the wheter the thresh is set successfully or not
      */
     public boolean setThreshold(double threshold) {
-        if (threshold < 0.1 || threshold > 1.0) {
+        if (threshold <= 0.1 || threshold >= 1.0) {
             return false;
         }
         this.threshold = threshold;
