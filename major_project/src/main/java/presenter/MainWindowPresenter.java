@@ -170,7 +170,7 @@ public class MainWindowPresenter {
             Rate rate = newValue.getRate();
             Convert result = newValue.getConvertedResult();
             if (rate == null || result == null){
-                mainWindowView.displayError("API error, no message from API");
+                mainWindowView.displayError("API error, no message from API, try it later");
                 mainWindowView.setProgressIndicator(false);
                 mainWindowView.enableConvert();
                 return;
