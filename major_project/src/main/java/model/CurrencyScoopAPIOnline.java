@@ -90,7 +90,8 @@ public class CurrencyScoopAPIOnline implements CurrencyScoop {
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(response.body(), JsonObject.class);
         JsonElement check = jsonObject.getAsJsonObject("response").getAsJsonObject("rates").get(to);
-
+        System.out.println("in API");
+        System.out.println(response == null);
         if (check.isJsonNull()){
 
             throw new IllegalArgumentException("Currency not found");

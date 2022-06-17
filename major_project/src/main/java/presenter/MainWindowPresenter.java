@@ -146,7 +146,6 @@ public class MainWindowPresenter {
                 Convert result = null;
                 try {
                     rate = model.getRate(finalFromCurrency, finalToCurrency, useCache);
-                    System.out.println(mainWindowView);
 
                     if (useCache){
                         result = model.calculateResult(finalAmount, rate);
@@ -170,6 +169,12 @@ public class MainWindowPresenter {
 
             Rate rate = newValue.getRate();
             Convert result = newValue.getConvertedResult();
+            if (rate == null || result == null){
+                mainWindowView.displayError("API error, no message from API");
+                mainWindowView.setProgressIndicator(false);
+                mainWindowView.enableConvert();
+                return;
+            }
             String from = model.getCountryName(rate.getFrom());
             String to = model.getCountryName(rate.getTo());
 

@@ -74,6 +74,7 @@ public class Model {
         }
         try{
             Rate rate = currencyScoop.getRate(from, to);
+            System.out.println(rate);
             return rate;
         }
         catch(Exception e){
