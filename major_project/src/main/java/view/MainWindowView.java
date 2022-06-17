@@ -100,17 +100,6 @@ public class MainWindowView {
 
 
     /**
-     * Sets status.
-     *
-     * @param currencyOnline the mode of currencyscoop, true if online, otherwise offline
-     * @param pastebinOnline the mode of pastebin, true if online, otherwise offline
-     */
-    public void setStatus(boolean currencyOnline, boolean pastebinOnline) {
-
-        this.presenter.setStatus(currencyOnline, pastebinOnline);
-    }
-
-    /**
      * Event handler for clicking add currency button.
      */
     @FXML
@@ -282,19 +271,18 @@ public class MainWindowView {
         this.presenter.controlMode(isLight);
     }
 
-    /**
-     * Display error message.
-     *
-     * @param error the error
-     */
-    @FXML
+
     public void displayError(String error){
+        System.out.println("error");
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        System.out.println("in display error");
         alert.setTitle("Error");
         alert.setHeaderText("Error");
         alert.setContentText(error);
+        System.out.println("in display error");
         alert.showAndWait();
     }
+
 
     /**
      * Set progress indicator visible/invisible.
@@ -302,7 +290,6 @@ public class MainWindowView {
      * @param isLoading make progress indicator visible if true, otherwise invisible
      */
     public void setProgressIndicator(boolean isLoading){
-        System.out.println(Thread.currentThread().getName());
         progressIndicator.setVisible(isLoading);
     }
 

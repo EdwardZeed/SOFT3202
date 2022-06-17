@@ -28,33 +28,7 @@ public class MainWindowPresenter {
      */
     public MainWindowPresenter(MainWindowView mainWindowView) {
         this.mainWindowView = mainWindowView;
-    }
-
-    /**
-     * Sets status.
-     * If currencyOnline is true, then use online implementation for CurrencyScoop, else use offline implementation.
-     * If pastebinOnline is true, then use online implementation for Pastebin, else use offline implementation.
-     *
-     * @param currencyOnline the currency online
-     * @param pastebinOnline the pastebin online
-     */
-    public void setStatus(boolean currencyOnline, boolean pastebinOnline) {
-
-        CurrencyScoop input;
-        Pastebin output;
-        if (currencyOnline) {
-            input = new CurrencyScoopAPIOnline();
-        }
-        else {
-            input = new CurrencyScoopAPIOffline();
-        }
-        if (pastebinOnline) {
-            output = new PastebinAPIOnline();
-        }
-        else {
-            output = new PastebinAPIOffline();
-        }
-        model = new Model(input, output);
+        this.model = StageManagement.model;
     }
 
     /**
@@ -123,13 +97,10 @@ public class MainWindowPresenter {
             System.out.println(resultSet.get());
             if (resultSet.get().getButtonData().getTypeCode().equals("Y")) {
                 System.out.println("user chose to use cache");
-//                rate = currencyScoopAPI.getRate(fromCurrency, toCurrency, false).getRate();
-//                result = currencyScoopAPI.calculateResult(amount_num, rate);
-//                String output = "from:" + fromCountry + "\nto:" + toCountry + "\nrate:" + rate + "\nstarting value:" + amount +"\nfinishing value:" + result;
-//                String toOutput = pastebinAPI.createPastin(output).getURI();
-//                this.mainWindowView.displayResult(rate, result);
+
                 Task<Result> task = this.getAPIRequestTask(amount_num,fromCurrency,toCurrency,this.mainWindowView,true);
                 Thread thread = new Thread(task);
+                System.out.println(this.mainWindowView);
                 thread.start();
             }
             else if (resultSet.get().getButtonData().getTypeCode().equals("N")) {
@@ -154,6 +125,7 @@ public class MainWindowPresenter {
     /**
      * Create the unique task to not occupy the GUI thread.
      * if useCache is true, then the rate will be pulled from cache and the result will be calculated by model instead of API.
+     * if the rate is lower than the threshold, then this task will nor display any information and display an error message.
      *
      * @param finalAmount       the amount to be converted
      * @param finalFromCurrency the start currency code
@@ -168,12 +140,14 @@ public class MainWindowPresenter {
             protected Result call() {
                 mainWindowView.disableConvert();
                 mainWindowView.setProgressIndicator(true);
-                System.out.println(Thread.currentThread().getName());
+//                System.out.println(Thread.currentThread().getName());
 
                 Rate rate = null;
                 Convert result = null;
                 try {
                     rate = model.getRate(finalFromCurrency, finalToCurrency, useCache);
+                    System.out.println(mainWindowView);
+
                     if (useCache){
                         result = model.calculateResult(finalAmount, rate);
                     }
@@ -198,6 +172,13 @@ public class MainWindowPresenter {
             Convert result = newValue.getConvertedResult();
             String from = model.getCountryName(rate.getFrom());
             String to = model.getCountryName(rate.getTo());
+
+            if (!model.checkThreshold(rate.getRate())){
+                System.out.println("rate lower than threshold");
+                mainWindowView.setProgressIndicator(false);
+                mainWindowView.enableConvert();
+                mainWindowView.displayError("Large difference in currency values");
+            }
 
             String output = "from:" + from + "\nto:" + to + "\nrate:" + rate.getRate() + "\nstarting value:" + finalAmount +"\nfinishing value:" + result.getResult();
 

@@ -14,6 +14,7 @@ public class Model {
     private CurrencyScoop currencyScoop;
     private Pastebin pastebin;
     private Database db;
+    private double threshold;
 
     private HashMap<String, String> countries = new HashMap<>();
 
@@ -199,5 +200,29 @@ public class Model {
      */
     public void setDatabase(Database db){
         this.db = db;
+    }
+
+    /**
+     * Sets threshold. if the threshold is not between 0.1 and 1.0, return false and do nothing. Otherwise, set the theshold and return true.
+     *
+     * @param threshold the threshold
+     * @return the wheter the thresh is set successfully or not
+     */
+    public boolean setThreshold(double threshold) {
+        if (threshold < 0.1 || threshold > 1.0) {
+            return false;
+        }
+        this.threshold = threshold;
+        return true;
+    }
+
+    /**
+     * Check threshold. if the amount is less than threshold, return false, otherwise return true.
+     *
+     * @param amount the amount
+     * @return whether the amount is less than the threshold
+     */
+    public boolean checkThreshold(double amount){
+        return amount >= threshold;
     }
 }

@@ -4,7 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import presenter.StageManagement;
-import view.MainWindowView;
+import view.BeginningWindowView;
 
 import java.io.File;
 
@@ -17,18 +17,18 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        File mainFXML = new File("src/main/resources/view/MainWindow.fxml");
         File mapFXML = new File("src/main/resources/view/MapWindow.fxml");
+        File beginningFXML = new File("src/main/resources/view/BeginningWindow.fxml");
 
-        FXMLLoader loader = new FXMLLoader(mainFXML.toURI().toURL());
         FXMLLoader MapLoader = new FXMLLoader(mapFXML.toURI().toURL());
+        FXMLLoader beginningLoader = new FXMLLoader(beginningFXML.toURI().toURL());
         Pane mapRoot = MapLoader.load();
 
         StageManagement.loaders.put("MapWindow", MapLoader);
         StageManagement.panes.put("MapWindow", mapRoot);
 
-        Scene scene = new Scene(loader.load());
-        MainWindowView controller = loader.getController();
+        Scene scene = new Scene(beginningLoader.load());
+        BeginningWindowView controller = beginningLoader.getController();
 
         boolean currencyStatus = true;
         boolean pastebinStatus = true;

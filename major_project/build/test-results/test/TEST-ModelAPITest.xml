@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ModelAPITest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-06-01T13:44:09" hostname="Edwards-MacBook-Pro.local" time="0.854">
+<testsuite name="ModelAPITest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-06-17T09:42:40" hostname="Edwards-MacBook-Pro.local" time="0.648">
   <properties/>
-  <testcase name="testPastebinOnline()" classname="ModelAPITest" time="0.777"/>
-  <testcase name="testConvertOnlineInvalid()" classname="ModelAPITest" time="0.033"/>
-  <testcase name="testConvertOnline()" classname="ModelAPITest" time="0.004"/>
-  <testcase name="testRateOffline()" classname="ModelAPITest" time="0.017"/>
+  <testcase name="testConvertInvalid()" classname="ModelAPITest" time="0.586"/>
+  <testcase name="testPastebinOnline()" classname="ModelAPITest" time="0.013"/>
+  <testcase name="testConvertOnline()" classname="ModelAPITest" time="0.002"/>
+  <testcase name="testRateOffline()" classname="ModelAPITest" time="0.019"/>
   <testcase name="testConvertOffline()" classname="ModelAPITest" time="0.003"/>
-  <testcase name="testPastebinOffline()" classname="ModelAPITest" time="0.001"/>
-  <testcase name="testRateOnline()" classname="ModelAPITest" time="0.012"/>
-  <testcase name="testGetRateInvalid()" classname="ModelAPITest" time="0.003"/>
+  <testcase name="testPastebinOffline()" classname="ModelAPITest" time="0.0"/>
+  <testcase name="testRateOnline()" classname="ModelAPITest" time="0.015"/>
+  <testcase name="testGetRateInvalid()" classname="ModelAPITest" time="0.004"/>
   <system-out><![CDATA[Database already exists
 Database already exists
 Database already exists

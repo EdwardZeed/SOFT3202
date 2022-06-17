@@ -3,6 +3,7 @@ package presenter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import model.Model;
 
 import java.util.HashMap;
 
@@ -27,4 +28,5 @@ public class StageManagement {
      * The constant panes.
      */
     public static HashMap<String, Pane> panes = new HashMap<>();
+    public static Model model;
 }

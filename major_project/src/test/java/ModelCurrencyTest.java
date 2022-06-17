@@ -5,8 +5,7 @@ import model.POJOs.Rate;
 import model.PastebinAPIOnline;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -95,5 +94,30 @@ public class ModelCurrencyTest {
         Convert result = model.calculateResult(1, rate);
         assertEquals(1.5, result.getResult(), 0.001);
 
+    }
+
+    /**
+     * Test check threshold.
+     */
+    @Test
+    public void testCheckAndSetThreshold(){
+        CurrencyScoopAPIOnline mockInputOnline = mock(CurrencyScoopAPIOnline.class);
+        PastebinAPIOnline mockOutputOnline = mock(PastebinAPIOnline.class);
+        Model model = new Model(mockInputOnline, mockOutputOnline);
+        model.setThreshold(0.5);
+        assertTrue(model.checkThreshold(0.5));
+        assertFalse(model.checkThreshold(0.4));
+
+        boolean check = model.setThreshold(1.2);
+        assertFalse(check);
+
+        boolean check2 = model.setThreshold(-1);
+        assertFalse(check2);
+
+        boolean check3 = model.setThreshold(0.1);
+        assertTrue(check3);
+
+        boolean check4 = model.setThreshold(1);
+        assertTrue(check4);
     }
 }
