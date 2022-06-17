@@ -20,6 +20,9 @@ URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/793884df5135c45191dda5
 # Exam Base Commit:
 SHA: 793884df5135c45191dda5fa6660bb6d9aca098b
 URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/793884df5135c45191dda5fa6660bb6d9aca098b
+# Exam Submission Commit:
+SHA: 9b81f04dc9e1f78ab204cab83dd2717a6880ee8e  
+URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/9b81f04dc9e1f78ab204cab83dd2717a6880ee8e
 # files
 as Josh recommended, all the fxml and css files are under resources/view folder,
 all the javadoc files are under javadoc/
