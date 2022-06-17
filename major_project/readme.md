@@ -18,7 +18,7 @@ URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/a5984fb25b1f3929963593
 SHA: 793884df5135c45191dda5fa6660bb6d9aca098b  
 URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/793884df5135c45191dda5fa6660bb6d9aca098b
 # Exam Base Commit:
-SHA: 793884df5135c45191dda5fa6660bb6d9aca098b
+SHA: 793884df5135c45191dda5fa6660bb6d9aca098b  
 URI: https://github.sydney.edu.au/wzhe8830/SCD2_2022/tree/793884df5135c45191dda5fa6660bb6d9aca098b
 # Exam Submission Commit:
 SHA: 2e27a84246c3a1e86623575b13e4a33a2f3af875    
